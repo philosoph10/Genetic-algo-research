@@ -5,16 +5,21 @@ from copy import deepcopy, copy
 
 
 class Population:
-    def __init__(self, fitness_function, seed=0, chromosomes=None):
+    def __init__(self, fitness_function, seed=0, chromosomes=None, n_optimal=1):
         self.fitness_function = fitness_function
 
         if chromosomes is not None:
             self.chromosomes = chromosomes
         else:
             self.chromosomes = np.empty(N, dtype=object)
-            self.chromosomes[0] = copy(fitness_function.get_optimal())
+            optimals = n_optimal if isinstance(n_optimal, int) else int(N * n_optimal)
+            if optimals > 0:
+                self.chromosomes[0] = copy(fitness_function.get_optimal())
+                optimal_genotype = self.chromosomes[0].genotype
+                for chr_i in range(1, optimals):
+                    self.chromosomes[chr_i] = Chromosome(chr_i, optimal_genotype, fitness_function)
             rng = np.random.default_rng(seed=seed)
-            for chr_i in range(1, N):
+            for chr_i in range(optimals, N):
                 genotype = rng.choice([b'0', b'1'], fitness_function.chr_length)
                 self.chromosomes[chr_i] = Chromosome(chr_i, genotype, fitness_function)
 
@@ -94,3 +99,14 @@ class Population:
     
     def __str__(self):
         return str(np.array([str(chr) for chr in self.chromosomes]))
+    
+
+if __name__ == '__main__':
+    from fitness_functions import Fx2
+    from encoding import FloatEncoder
+    ff = Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True))
+    pop = Population(fitness_function=ff, n_optimal=0.1)
+    print(f'N = {N}')
+
+    for i in range(0, N):
+        print(f"Chromosome[{i}] = {pop.chromosomes[i]}")
