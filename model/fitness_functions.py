@@ -162,12 +162,52 @@ class Fexp(FitnessFunc):
         return self.encoder.decode(chromosome)
 
 
+class Rastrigin(FitnessFunc):
+    def __init__(self, a, encoder: Encoder):
+        self.a = a
+        super().__init__(encoder.length)
+        self.encoder = encoder
+        self.is_caching = encoder.length <= 12
+        self.cache_dict = {}
+        if self.is_caching:
+            for v in self.encoder.get_all_values():
+                self.cache_dict[v.tobytes()] = self.__apply(v)
+
+    def __apply(self, genotype):
+        x = self.encoder.decode(genotype)
+        return np.abs(10 * np.cos(2 * np.pi * self.a) - self.a ** 2) \
+                    + 10 * np.cos(2 * np.pi * x) - x**2
+
+    def apply(self, genotype):
+        if self.is_caching:
+            return self.cache_dict[genotype.tobytes()]
+        return self.__apply(genotype)
+
+    def get_optimal(self):
+        if not self.optimal:
+            optimal_genotype = self.encoder.encode(0)
+            self.optimal =  Chromosome(0, optimal_genotype, self)
+        return self.optimal
+
+    def get_phenotype(self, chromosome):
+        return self.encoder.decode(chromosome)
+
+
 if __name__ == "__main__":
-    from model.encoding import BinaryEncoder
-    fh = FH(7, BinaryEncoder(7))
-    genotype = np.array([b'0', b'0', b'0', b'1', b'0', b'0', b'1'])
-    print(fh.apply(genotype))
-    # print(fh.apply(b'0')) # raises ValueError
-    print(fh.get_optimal())
-    print(fh.get_phenotype(genotype))
-    # print(fh.get_phenotype(b'1')) # raises ValueError
+    from model.encoding import *
+    # fh = FH(7, BinaryEncoder(7))
+    # genotype = np.array([b'0', b'0', b'0', b'1', b'0', b'0', b'1'])
+    # print(fh.apply(genotype))
+    # # print(fh.apply(b'0')) # raises ValueError
+    # print(fh.get_optimal())
+    # print(fh.get_phenotype(genotype))
+    # # print(fh.get_phenotype(b'1')) # raises ValueError
+
+    print("---------------------------")
+    print("Rastrigin")
+    float_enc = FloatEncoder(-5.12, 5.11, 10)
+    x = 0
+    x_enc = float_enc.encode(x)
+    rastrigin = Rastrigin(7, float_enc)
+    print(f"f(0) = {rastrigin.apply(x_enc)}")
+    print(f"The optimal phenotype is: {rastrigin.get_phenotype(rastrigin.get_optimal().genotype)}")
