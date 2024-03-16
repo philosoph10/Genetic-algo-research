@@ -108,8 +108,8 @@ class Fx2(FitnessFunc):
             self.optimal = Chromosome(0, optimal_genotype, self)
         return self.optimal
 
-    def get_phenotype(self, chromosome):
-        return self.encoder.decode(chromosome)
+    def get_phenotype(self, genotype):
+        return self.encoder.decode(genotype)
 
 
 class F5122subx2(FitnessFunc):
@@ -158,8 +158,8 @@ class Fexp(FitnessFunc):
             self.optimal =  Chromosome(0, optimal_genotype, self)
         return self.optimal
 
-    def get_phenotype(self, chromosome):
-        return self.encoder.decode(chromosome)
+    def get_phenotype(self, genotype):
+        return self.encoder.decode(genotype)
 
 
 class Rastrigin(FitnessFunc):
@@ -186,11 +186,70 @@ class Rastrigin(FitnessFunc):
     def get_optimal(self):
         if not self.optimal:
             optimal_genotype = self.encoder.encode(0)
-            self.optimal =  Chromosome(0, optimal_genotype, self)
+            self.optimal = Chromosome(0, optimal_genotype, self)
         return self.optimal
 
-    def get_phenotype(self, chromosome):
-        return self.encoder.decode(chromosome)
+    def get_phenotype(self, genotype):
+        return self.encoder.decode(genotype)
+
+
+class Deb2(FitnessFunc):
+    def __init__(self, encoder: Encoder):
+        super().__init__(encoder.length)
+        self.encoder = encoder
+        self.is_caching = encoder.length <= 12
+        self.cache_dict = {}
+        if self.is_caching:
+            for v in self.encoder.get_all_values():
+                self.cache_dict[v.tobytes()] = self.__apply(v)
+
+    def __apply(self, genotype):
+        x = self.encoder.decode(genotype)
+        return np.exp(-2 * np.log(2) * ((x - 0.1) / 0.8) ** 2) * np.sin(5 * np.pi * x) ** 6
+
+    def apply(self, genotype):
+        if self.is_caching:
+            return self.cache_dict[genotype.tobytes()]
+        return self.__apply(genotype)
+
+    def get_optimal(self):
+        if not self.optimal:
+            optimal_genotype = self.encoder.encode(0.1)
+            self.optimal = Chromosome(0, optimal_genotype, self)
+        return self.optimal
+
+    def get_phenotype(self, genotype):
+        return self.encoder.decode(genotype)
+
+
+class Deb4(FitnessFunc):
+    def __init__(self, encoder: Encoder):
+        super().__init__(encoder.length)
+        self.encoder = encoder
+        self.is_caching = encoder.length <= 12
+        self.cache_dict = {}
+        if self.is_caching:
+            for v in self.encoder.get_all_values():
+                self.cache_dict[v.tobytes()] = self.__apply(v)
+
+    def __apply(self, genotype):
+        x = self.encoder.decode(genotype)
+        return np.exp(-2 * np.log(2) * ((x - 0.08) / 0.854) ** 2) * \
+            np.sin(5 * np.pi * (x ** 0.75 - 0.05)) ** 6
+
+    def apply(self, genotype):
+        if self.is_caching:
+            return self.cache_dict[genotype.tobytes()]
+        return self.__apply(genotype)
+
+    def get_optimal(self):
+        if not self.optimal:
+            optimal_genotype = self.encoder.encode(0.08)
+            self.optimal = Chromosome(0, optimal_genotype, self)
+        return self.optimal
+
+    def get_phenotype(self, genotype):
+        return self.encoder.decode(genotype)
 
 
 if __name__ == "__main__":
@@ -203,11 +262,29 @@ if __name__ == "__main__":
     # print(fh.get_phenotype(genotype))
     # # print(fh.get_phenotype(b'1')) # raises ValueError
 
+    # print("---------------------------")
+    # print("Rastrigin")
+    # float_enc = FloatEncoder(-5.12, 5.11, 10)
+    # x = 0
+    # x_enc = float_enc.encode(x)
+    # rastrigin = Rastrigin(7, float_enc)
+    # print(f"f(0) = {rastrigin.apply(x_enc)}")
+    # print(f"The optimal phenotype is: {rastrigin.get_phenotype(rastrigin.get_optimal().genotype)}")
+
     print("---------------------------")
-    print("Rastrigin")
-    float_enc = FloatEncoder(-5.12, 5.11, 10)
-    x = 0
+    print("Decreasing maxima, Deb’s test function 2")
+    float_enc = FloatEncoder(0, 1.023, 10)
+    x = 0.1
     x_enc = float_enc.encode(x)
-    rastrigin = Rastrigin(7, float_enc)
-    print(f"f(0) = {rastrigin.apply(x_enc)}")
-    print(f"The optimal phenotype is: {rastrigin.get_phenotype(rastrigin.get_optimal().genotype)}")
+    deb2 = Deb2(float_enc)
+    print(f"f(0.1) = {deb2.apply(x_enc)}")
+    print(f"The optimal phenotype is: {deb2.get_phenotype(deb2.get_optimal().genotype)}")
+
+    print("---------------------------")
+    print("Uneven decreasing maxima, Deb’s test function 4")
+    float_enc = FloatEncoder(0, 1.023, 10)
+    x = 0.08
+    x_enc = float_enc.encode(x)
+    deb4 = Deb4(float_enc)
+    print(f"f(0.08) = {deb4.apply(x_enc)}")
+    print(f"The optimal phenotype is: {deb4.get_phenotype(deb4.get_optimal().genotype)}")
