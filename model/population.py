@@ -2,6 +2,7 @@ import numpy as np
 from config import N, EPS, N_LAST_GENS
 from model.chromosome import Chromosome
 from copy import deepcopy, copy
+import random
 
 
 class Population:
@@ -23,6 +24,7 @@ class Population:
                 genotype = rng.choice([b'0', b'1'], fitness_function.chr_length)
                 self.chromosomes[chr_i] = Chromosome(chr_i, genotype, fitness_function)
 
+        random.shuffle(self.chromosomes)
         self.update()
 
     def has_converged(self, f_avgs, param_names):
