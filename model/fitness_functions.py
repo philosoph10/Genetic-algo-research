@@ -73,7 +73,7 @@ class FH(FitnessFunc):
     def apply(self, genotype):
         if len(genotype) != self.chr_length:
             raise ValueError("Incorrect length of genotype!")
-        k = len([True for gene in genotype if gene == b'0'])
+        k = len([True for gene in genotype if gene == b'1'])
         return (self.chr_length - k)
 
     def get_optimal(self):
