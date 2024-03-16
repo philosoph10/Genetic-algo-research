@@ -24,7 +24,8 @@ class Population:
                 genotype = rng.choice([b'0', b'1'], fitness_function.chr_length)
                 self.chromosomes[chr_i] = Chromosome(chr_i, genotype, fitness_function)
 
-        random.shuffle(self.chromosomes)
+            random.shuffle(self.chromosomes)
+        
         self.update()
 
     def has_converged(self, f_avgs, param_names):
@@ -107,7 +108,7 @@ if __name__ == '__main__':
     from fitness_functions import Fx2
     from encoding import FloatEncoder
     ff = Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True))
-    pop = Population(fitness_function=ff, n_optimal=0.1)
+    pop = Population(fitness_function=ff)
     print(f'N = {N}')
 
     for i in range(0, N):
