@@ -7,7 +7,9 @@ from math import exp
 
 
 class FitnessFunc:
-    def __init__(self, chr_length):
+    def __init__(self, chr_length: int):
+        if chr_length < 0:
+            raise ValueError("The chromosome length should be non-negative!")
         self.chr_length = chr_length
         self.optimal = None
 
@@ -63,6 +65,28 @@ class FHD(FitnessFunc):
         return len([True for gene in genotype if gene == b'1'])
 
 
+class FH(FitnessFunc):
+    def __init__(self, chr_length, encoder: Encoder):
+        super().__init__(chr_length)
+        self.encoder = encoder
+
+    def apply(self, genotype):
+        if len(genotype) != self.chr_length:
+            raise ValueError("Incorrect length of genotype!")
+        k = len([True for gene in genotype if gene == b'0'])
+        return (self.chr_length - k)
+
+    def get_optimal(self):
+        if not self.optimal:
+            self.optimal = Chromosome(0, np.full(self.chr_length, b'0'), self)
+        return self.optimal
+
+    def get_phenotype(self, genotype):
+        if len(genotype) != self.chr_length:
+            raise ValueError("Incorrect length of genotype!")
+        return self.encoder.decode(genotype)
+
+
 class Fx2(FitnessFunc):
     def __init__(self, encoder: Encoder):
         super().__init__(encoder.length)
@@ -81,7 +105,7 @@ class Fx2(FitnessFunc):
     def get_optimal(self):
         if not self.optimal:
             optimal_genotype = self.encoder.encode(self.encoder.upper_bound)
-            self.optimal =  Chromosome(0, optimal_genotype, self)
+            self.optimal = Chromosome(0, optimal_genotype, self)
         return self.optimal
 
     def get_phenotype(self, chromosome):
@@ -136,3 +160,14 @@ class Fexp(FitnessFunc):
 
     def get_phenotype(self, chromosome):
         return self.encoder.decode(chromosome)
+
+
+if __name__ == "__main__":
+    from model.encoding import BinaryEncoder
+    fh = FH(7, BinaryEncoder(7))
+    genotype = np.array([b'0', b'0', b'0', b'1', b'0', b'0', b'1'])
+    print(fh.apply(genotype))
+    # print(fh.apply(b'0')) # raises ValueError
+    print(fh.get_optimal())
+    print(fh.get_phenotype(genotype))
+    # print(fh.get_phenotype(b'1')) # raises ValueError
