@@ -1,4 +1,4 @@
-from multiprocessing import Pool
+from multiprocess import Pool
 import gc
 from config import NR, THREADS
 from stats.experiment_stats import ExperimentStats

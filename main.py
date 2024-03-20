@@ -9,6 +9,10 @@ from runner import run_experiment
 from datetime import datetime
 import time
 
+
+def centered_scaling(ps: float):
+    return lambda arr: -(np.mean(arr)*ps - np.max(arr)) / (ps - 1)
+
 if env == 'test':
     fitness_functions = [
         (FconstALL(100), 'FconstALL'),
@@ -16,9 +20,10 @@ if env == 'test':
         (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2')
     ]
     selection_methods = [
-        (RWS(), 'RWS'),
-        (SUS(), 'SUS'),
-        (ScaledRWS(1., np.mean), 'Mean RWS')
+        # (RWS(), 'RWS'),
+        # (SUS(), 'SUS'),
+        # (ScaledRWS(1., np.mean), 'Mean RWS'),
+        (ScaledSUS(1., centered_scaling(1.2)), 'Centred SUS, ps=1.2')
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators')
@@ -46,12 +51,14 @@ else:
     selection_methods = [
         (RWS, 'RWS'),
         (DisruptiveRWS, 'RWS_disruptive'),
-        (BlendedRWS, 'RWS_blended'),
-        (WindowRWS, 'RWS_window'),
         (SUS, 'SUS'),
         (DisruptiveSUS, 'SUS_disruptive'),
-        (BlendedSUS, 'SUS_blended'),
-        (WindowSUS, 'SUS_window')
+        (ScaledRWS(1., np.mean), 'Mean RWS'),
+        (ScaledSUS(1., np.mean), 'Mean SUS'),
+        (ScaledRWS(1., np.median), 'Median RWS'),
+        (ScaledRWS(1., centered_scaling(1.2)), 'Centered RWS, ps=1.2'),
+        (ScaledRWS(1., centered_scaling(1.6)), 'Centered RWS, ps=1.6'),
+        (ScaledRWS(1., centered_scaling(2)), 'Centered RWS, ps=2')
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators'),

@@ -121,3 +121,38 @@ class WindowSUS(SelectionMethod):
 
         mating_pool = SUS.basic_sus(population, fitness_sum, fitness_scale)
         population.update_chromosomes(mating_pool)
+
+
+class ScaledSUS(SelectionMethod):
+
+    def __init__(self, scale: float, bias: callable):
+        self.a = scale
+        self.b = bias
+
+    def select(self, population: Population):
+        fitness_sum = 0
+        fitness_scale = []
+
+        bias = self.b(population.fitnesses)
+
+        scaled_fitnesses = np.array([self.a*chr.fitness + bias for chr in population.chromosomes])
+        min_fitness = np.min(scaled_fitnesses)
+        if min_fitness < 0:
+            scaled_fitnesses -= min_fitness
+
+        for index, chromosome in enumerate(population.chromosomes):
+            scaled_fitness = scaled_fitnesses[index]
+            if scaled_fitness < 0:
+                print(f"!!!\n\tScaled fitness = {scaled_fitness}\n!!!")
+            fitness_sum += scaled_fitness
+            if index == 0:
+                fitness_scale.append(scaled_fitness)
+            else:
+                fitness_scale.append(scaled_fitness + fitness_scale[index - 1])
+
+        if fitness_sum == 0:
+            fitness_sum = 0.0001 * N
+            fitness_scale = [0.0001 * (i+1) for i in range(N)]
+
+        mating_pool = SUS.basic_sus(population, fitness_sum, fitness_scale)
+        population.update_chromosomes(mating_pool)
