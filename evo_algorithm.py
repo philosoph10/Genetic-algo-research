@@ -12,10 +12,12 @@ class EvoAlgorithm:
                  initial_population: Population,
                  selection_method: SelectionMethod,
                  genetic_operator: GeneticOperator,
+                 population_init,
                  param_names: tuple[str]):
         self.population: Population = initial_population
         self.selection_method = selection_method
         self.genetic_operator = genetic_operator
+        
         self.param_names = param_names
 
         self.gen_i = 0

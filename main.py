@@ -12,7 +12,7 @@ import time
 if env == 'test':
     fitness_functions = [
         (FconstALL(100), 'FconstALL'),
-        (FHD(100, 100), 'FHD'),
+        # (FHD(100, 100), 'FHD'),
         (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2')
     ]
     selection_methods = [
@@ -21,6 +21,11 @@ if env == 'test':
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators')
+    ]
+    population_inits = [
+        (0, 'no optimal chromosomes'),
+        (1, '1 optimal chromosome'),
+        (0.1, "10% optimal chromosomes")
     ]
 else:
     fitness_functions = [
@@ -58,19 +63,31 @@ else:
 # {fitness_func_name: [(tuples with run parameters), (), ..., ()], other_func: [], ...}
 experiment_params = {
     ff: [
-        (sm, go, (ff_name, sm_name, go_name))
+        (sm, go, pi, (ff_name, sm_name, go_name, pi_name))
         for (sm, sm_name) in selection_methods
         for (go, go_name) in gen_operators
+        for (pi, pi_name) in population_inits
     ] for (ff, ff_name) in fitness_functions
 }
 
 # only keeping one list of populations in memory at a time (for one fitness function)
-def generate_all_populations_for_fitness_function(ff):
-    return [ff.generate_population_for_run(run_i) for run_i in range(NR)]
+def generate_all_populations_for_fitness_function(ff, n_optimal=1):
+    return [ff.generate_population_for_run(run_i, n_optimal=n_optimal) for run_i in range(NR)]
 
 def log(x):
     datetime_prefix = str(datetime.now())[:-4]
     print(f'{datetime_prefix} | {x}')
+
+def validate_params(ff: FitnessFunc, sm: SelectionMethod, go: GeneticOperator, pi, param_names: list) -> bool:
+    """
+    validate the parameter set with respect to population initialization
+    """
+    if isinstance(ff, FconstALL) and (not isinstance(pi, int) or pi != 1):
+        return False
+    if issubclass(go, BlankGenOperator) and pi == 0:
+        return False
+    return True
+
 
 if __name__ == '__main__':
     log('Program start')
@@ -80,8 +97,24 @@ if __name__ == '__main__':
 
     for ff in experiment_params:
         ff_start_time = time.time()
-        populations = generate_all_populations_for_fitness_function(ff)
-        params = [params + (populations,) for params in experiment_params[ff]]
+        # get experiment parameters for a given running configuration
+        exp_params = experiment_params[ff]
+
+        # generate populations for each each initialization configuration
+        populations = {
+            pi: generate_all_populations_for_fitness_function(ff, n_optimal=pi)
+            for (pi, name) in population_inits
+        }
+
+        # filter out the configurations that are not required
+        exp_params = [param for param in exp_params if validate_params(ff, *param)]
+
+        # add respective populations to each parameter configuration
+        # params[2] is the population initialization parameter
+        params = [params + (populations[params[2]],) for params in exp_params]
+        # print(f'function = {ff}')
+        # for i, param in enumerate(params):
+        #     print(f'param[{i}] = {param}')
         experiment_stats_list = [run_experiment(*p) for p in params]
 
         excel.write_ff_stats(experiment_stats_list)
@@ -90,7 +123,7 @@ if __name__ == '__main__':
             results.append(experiment_stats)
 
         ff_end_time = time.time()
-        ff_name = experiment_params[ff][0][2][0]
+        ff_name = experiment_params[ff][0][3][0]
         log(f'{ff_name} experiments finished in {(ff_end_time - ff_start_time):.2f}s')
 
     excel.write_aggregated_stats(results)
