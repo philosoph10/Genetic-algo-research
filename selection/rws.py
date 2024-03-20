@@ -1,5 +1,6 @@
 from config import G, N
 import numpy as np
+from model.population import Population
 from selection.selection_method import SelectionMethod
 from copy import copy
 
@@ -76,6 +77,30 @@ class WindowRWS(SelectionMethod):
             fitness_sum = 0.0001 * N
 
         probabilities = [fitness/fitness_sum for fitness in f_scaled]
+        chosen = np.random.choice(population.chromosomes, size=N, p=probabilities)
+        mating_pool = np.array([copy(chr) for chr in chosen])
+        population.update_chromosomes(mating_pool)
+
+
+class ScaledRWS(SelectionMethod):
+
+    def __init__(self, scale: float, bias: callable):
+        self.a = scale
+        self.b = bias
+
+    def select(self, population: Population):
+        bias = self.b(population.fitnesses)
+        fitness_list = [self.a*fitness + bias for fitness in population.fitnesses]
+        min_fitness = np.min(fitness_list)
+        if min_fitness < 0:
+            fitness_list = [fitness - min_fitness for fitness in fitness_list]
+        fitness_sum = sum(fitness_list)
+
+        if fitness_sum == 0:
+            fitness_list = [0.0001 for _ in fitness_list]
+            fitness_sum = 0.0001 * N
+
+        probabilities = [fitness/fitness_sum for fitness in fitness_list]
         chosen = np.random.choice(population.chromosomes, size=N, p=probabilities)
         mating_pool = np.array([copy(chr) for chr in chosen])
         population.update_chromosomes(mating_pool)

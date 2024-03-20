@@ -6,11 +6,13 @@ from evo_algorithm import EvoAlgorithm
 from model.population import Population
 from selection.selection_method import SelectionMethod
 from model.gen_operators import GeneticOperator
+from selection.rws import *
 from copy import deepcopy
 from datetime import datetime
 
 def run_experiment(selection_method: SelectionMethod,
                    genetic_operator: GeneticOperator,
+                   population_init,
                    param_names: tuple[str],
                    populations: list[Population]):
     stats = ExperimentStats(param_names)
@@ -19,6 +21,7 @@ def run_experiment(selection_method: SelectionMethod,
         (populations[run_i],
          selection_method,
          genetic_operator,
+         population_init,
          param_names,
          run_i
         )
@@ -44,7 +47,13 @@ def run_experiment(selection_method: SelectionMethod,
 def run(init_population: Population,
         selection_method: SelectionMethod,
         genetic_operator: GeneticOperator,
+        population_init,
         param_names: tuple[str],
         run_i: int):
-    current_run = EvoAlgorithm(deepcopy(init_population), selection_method(), genetic_operator, param_names).run(run_i)
+    # if isinstance(selection_method, ScaledRWS):
+    #     sm_obj = selection_method
+    # else:
+    #     sm_obj = selection_method()
+    sm_obj = selection_method
+    current_run = EvoAlgorithm(deepcopy(init_population), sm_obj, genetic_operator, population_init, param_names).run(run_i)
     return (run_i, current_run)

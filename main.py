@@ -16,8 +16,9 @@ if env == 'test':
         (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2')
     ]
     selection_methods = [
-        (RWS, 'RWS'),
-        (SUS, 'SUS')
+        (RWS(), 'RWS'),
+        (SUS(), 'SUS'),
+        (ScaledRWS(1., np.mean), 'Mean RWS')
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators')
