@@ -24,15 +24,15 @@ RUN_STATS_NAMES = [
     'NI', 'F_found', 'F_avg',
     'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg',
     'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg',
-    'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
+    'I_start', 'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
     's_min', 'NI_s_min', 's_max', 'NI_s_max', 's_avg',
-    'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg'
+    'GR_start', 'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg'
 ]
 EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',
 
     'nonSuc', 'nonMin_NI', 'nonMax_NI', 'nonAvg_NI', 'nonSigma_NI',
-    'nonAvg_F_Found', 'nonSigma_F_Found', 'nonMax_F_Found',
+    'nonAvg_F_found', 'nonSigma_F_found', 'nonMax_F_found',
     
     'Min_RR_min', 'NI_RR_min', 'Max_RR_max', 'NI_RR_max',
     'Avg_RR_min', 'Avg_RR_max', 'Avg_RR_avg',

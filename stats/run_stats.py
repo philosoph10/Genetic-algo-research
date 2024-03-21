@@ -26,6 +26,7 @@ class RunStats:
         self.Teta_avg = None
 
         # Selection Intensity
+        self.I_start = None
         self.I_min = None
         self.NI_I_min = None
         self.I_max = None
@@ -40,6 +41,7 @@ class RunStats:
         self.s_avg = None
 
         # Growth Rate
+        self.GR_start = None
         self.GR_early = None
         self.GR_late = None
         self.NI_GR_late = None
@@ -72,6 +74,8 @@ class RunStats:
 
         if self.param_names[0] != 'FconstALL':
             # Selection Intensity
+            if gen_i == 0:
+                self.I_start = gen_stats.intensity
             if self.I_min is None or gen_stats.intensity < self.I_min:
                 self.I_min = gen_stats.intensity
                 self.NI_I_min = gen_i
@@ -96,6 +100,8 @@ class RunStats:
                 self.s_avg = (self.s_avg * (gen_i - 1) + gen_stats.difference) / gen_i
 
             # Growth Rate
+            if gen_i == 0:
+                self.GR_start = gen_stats.growth_rate
             if gen_i == 2:
                 self.GR_early = gen_stats.growth_rate
             if self.GR_late is None and gen_stats.num_of_best >= N / 2:

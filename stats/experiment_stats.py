@@ -20,9 +20,9 @@ class ExperimentStats:
         self.nonMax_NI = None
         self.nonAvg_NI = None
         self.nonSigma_NI = None
-        self.nonAvg_F_Found = None
-        self.nonSigma_F_Found = None
-        self.nonMax_F_Found = None
+        self.nonAvg_F_found = None
+        self.nonSigma_F_found = None
+        self.nonMax_F_found = None
 
         # Reproduction Rate
         self.Min_RR_min = None
@@ -213,11 +213,11 @@ class ExperimentStats:
             self.nonMax_NI = max(nonNIs)
             self.nonAvg_NI = np.mean(nonNIs)
             self.nonSigma_NI = np.std(nonNIs)
-        F_Found_list = [run.F_Found for run in runs]
-        if F_Found_list:
-            self.nonAvg_F_Found = np.mean(F_Found_list)
-            self.nonSigma_F_Found = np.std(F_Found_list)
-            self.nonMax_F_Found = max(F_Found_list)
+        F_found_list = [run.F_found for run in runs]
+        if F_found_list:
+            self.nonAvg_F_found = np.mean(F_found_list)
+            self.nonSigma_F_found = np.std(F_found_list)
+            self.nonMax_F_found = max(F_found_list)
 
 
     def __str__(self):
