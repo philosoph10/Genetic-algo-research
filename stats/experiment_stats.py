@@ -14,6 +14,16 @@ class ExperimentStats:
         self.Avg_NI = None
         self.Sigma_NI = None
 
+        # Non-Successful but Convergent Runs
+        self.nonSuc = None
+        self.nonMin_NI = None
+        self.nonMax_NI = None
+        self.nonAvg_NI = None
+        self.nonSigma_NI = None
+        self.nonAvg_F_Found = None
+        self.nonSigma_F_Found = None
+        self.nonMax_F_Found = None
+
         # Reproduction Rate
         self.Min_RR_min = None
         self.NI_RR_min = None
@@ -83,9 +93,15 @@ class ExperimentStats:
         self.__calculate_teta_stats(successful_runs)
 
         if self.params[0] != 'FconstALL':
+            non_successful_convergent_runs = [run for run in self.runs 
+                                          if (not run.is_successful and run.has_converged)]
+            self.N_nonSuc = len(non_successful_convergent_runs)
+            self.nonSuc = self.N_nonSuc / NR
+
             self.__calculate_s_stats(successful_runs)
             self.__calculate_i_stats(successful_runs)
             self.__calculate_gr_stats(successful_runs)
+            self.__calculate_non_suc_stats(non_successful_convergent_runs)
 
 
     def __calculate_convergence_stats(self, runs: list[RunStats]):
@@ -189,6 +205,20 @@ class ExperimentStats:
             self.Avg_GR_avg = np.mean(gra_list)
             self.Min_GR_avg = min(gra_list)
             self.Max_GR_avg = max(gra_list)
+    
+    def __calculate_non_suc_stats(self, runs: list[RunStats]):
+        nonNIs = [run.NI for run in runs]
+        if nonNIs:
+            self.nonMin_NI = min(nonNIs)
+            self.nonMax_NI = max(nonNIs)
+            self.nonAvg_NI = np.mean(nonNIs)
+            self.nonSigma_NI = np.std(nonNIs)
+        F_Found_list = [run.F_Found for run in runs]
+        if F_Found_list:
+            self.nonAvg_F_Found = np.mean(F_Found_list)
+            self.nonSigma_F_Found = np.std(F_Found_list)
+            self.nonMax_F_Found = max(F_Found_list)
+
 
     def __str__(self):
         return ("Suc: " + str(self.Suc) + "%" +

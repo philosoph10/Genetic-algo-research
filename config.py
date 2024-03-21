@@ -1,5 +1,5 @@
 # environment parameters
-env = 'prod'
+env = 'test'
 THREADS = 16
 
 # run parameters
@@ -30,6 +30,9 @@ RUN_STATS_NAMES = [
 ]
 EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',
+
+    'nonSuc', 'nonMin_NI', 'nonMax_NI', 'nonAvg_NI', 'nonSigma_NI',
+    'nonAvg_F_Found', 'nonSigma_F_Found', 'nonMax_F_Found',
     
     'Min_RR_min', 'NI_RR_min', 'Max_RR_max', 'NI_RR_max',
     'Avg_RR_min', 'Avg_RR_max', 'Avg_RR_avg',

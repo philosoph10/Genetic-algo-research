@@ -44,6 +44,7 @@ class EvoAlgorithm:
 
         gen_stats = self.__calculate_final_stats(run_i)
         self.run_stats.NI = self.gen_i
+        self.run_stats.has_converged = self.has_converged
         self.run_stats.is_successful = self.__check_success(gen_stats)
 
         if run_i < RUNS_TO_PLOT:
