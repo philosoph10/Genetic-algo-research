@@ -21,9 +21,9 @@ if env == 'test':
     ]
     selection_methods = [
         # (RWS(), 'RWS'),
-        # (SUS(), 'SUS'),
+        (SUS(), 'SUS'),
         # (ScaledRWS(1., np.mean), 'Mean RWS'),
-        (ScaledSUS(1., centered_scaling(1.2)), 'Centred SUS, ps=1.2')
+        # (ScaledSUS(1., centered_scaling(1.2)), 'Centred SUS, ps=1.2')
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators')

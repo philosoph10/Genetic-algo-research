@@ -2,3 +2,4 @@ numpy
 XlsxWriter
 matplotlib
 multiprocess
+scipy
