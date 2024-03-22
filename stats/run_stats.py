@@ -1,4 +1,4 @@
-from config import N
+from config import N, G
 from stats.generation_stats import GenerationStats
 
 class RunStats:
@@ -12,6 +12,8 @@ class RunStats:
         self.has_converged = False
 
         # Reproduction Rate
+        self.RR_start = None
+        self.RR_fin = None
         self.RR_min = None
         self.NI_RR_min = None
         self.RR_max = None
@@ -19,11 +21,17 @@ class RunStats:
         self.RR_avg = None
 
         # Loss of Diversity
+        self.Teta_start = None
+        self.Teta_fin = None
         self.Teta_min = None
         self.NI_Teta_min = None
         self.Teta_max = None
         self.NI_Teta_max = None
         self.Teta_avg = None
+
+        # Unique chromosomes
+        self.unique_X_start = None
+        self.unique_X_fin = None
 
         # Selection Intensity
         self.I_start = None
@@ -49,6 +57,9 @@ class RunStats:
 
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
         # Reproduction Rate
+        if gen_i == 0:
+            self.RR_start = gen_stats.reproduction_rate
+        self.RR_fin = gen_stats.reproduction_rate
         if self.RR_min is None or gen_stats.reproduction_rate < self.RR_min:
             self.RR_min = gen_stats.reproduction_rate
             self.NI_RR_min = gen_i
@@ -61,6 +72,9 @@ class RunStats:
             self.RR_avg = (self.RR_avg * (gen_i - 1) + gen_stats.reproduction_rate) / gen_i
 
         # Loss of Diversity
+        if gen_i == 0:
+            self.Teta_start = gen_stats.loss_of_diversity
+        self.Teta_fin = gen_stats.loss_of_diversity
         if self.Teta_min is None or gen_stats.loss_of_diversity < self.Teta_min:
             self.Teta_min = gen_stats.loss_of_diversity
             self.NI_Teta_min = gen_i
@@ -71,6 +85,11 @@ class RunStats:
             self.Teta_avg = gen_stats.loss_of_diversity
         else:
             self.Teta_avg = (self.Teta_avg * (gen_i - 1) + gen_stats.loss_of_diversity) / gen_i
+        
+        # Unique chromosomes
+        if gen_i == 0:
+            self.unique_X_start = gen_stats.n_unique
+        self.unique_X_fin = gen_stats.n_unique
 
         if self.param_names[0] != 'FconstALL':
             # Selection Intensity

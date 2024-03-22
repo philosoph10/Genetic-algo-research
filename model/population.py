@@ -88,6 +88,14 @@ class Population:
 
     def get_ids(self):
         return [chr.id for chr in self.chromosomes]
+    
+    def get_unique_X(self):
+        '''
+        Find the number of different chromosomes in the population
+        '''
+        unique_genotypes = set(tuple(genotype) for genotype in self.genotypes)
+        return len(unique_genotypes)
+
 
     def update(self):
         self.fitnesses = np.array([chr.fitness for chr in self.chromosomes])
@@ -105,11 +113,23 @@ class Population:
     
 
 if __name__ == '__main__':
-    from fitness_functions import Fx2
-    from encoding import FloatEncoder
+    from fitness_functions import Fx2, FH
+    from encoding import FloatEncoder, BinaryEncoder
     ff = Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True))
     pop = Population(fitness_function=ff)
     print(f'N = {N}')
 
     for i in range(0, N):
         print(f"Chromosome[{i}] = {pop.chromosomes[i]}")
+
+    fh = FH(2, BinaryEncoder(2))
+    pop = Population(fitness_function=fh, chromosomes=np.array([
+        Chromosome(0, np.array([b'0', b'1']), fh),
+        Chromosome(1, np.array([b'0', b'0']), fh),
+        Chromosome(2, np.array([b'0', b'0']), fh),
+        Chromosome(3, np.array([b'0', b'1']), fh)
+    ]))
+    print(f'There are {pop.get_unique_X()} different chromosomes in the population')
+
+    pop = Population(fitness_function=fh, chromosomes=np.array([]))
+    print(f'There are {pop.get_unique_X()} different chromosomes in the population')

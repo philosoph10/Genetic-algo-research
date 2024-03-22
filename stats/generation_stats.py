@@ -19,6 +19,7 @@ class GenerationStats:
         self.intensity = None
         self.reproduction_rate = None
         self.loss_of_diversity = None
+        self.n_unique = None
 
         # Selection pressure
         self.pr = None
@@ -30,6 +31,7 @@ class GenerationStats:
 
     def calculate_stats_before_selection(self, prev_gen_stats):
         self.ids_before_selection = set(self.population.get_ids())
+        self.n_unique = self.population.get_unique_X()
 
         if self.param_names[0] != 'FconstALL':
             self.f_avg = self.population.get_fitness_avg()

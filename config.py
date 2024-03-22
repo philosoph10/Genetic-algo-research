@@ -19,11 +19,12 @@ get_pop_seed = lambda run_i: 1381*run_i + 5912826
 # output parameters
 DISTRIBUTIONS_TO_PLOT = 5
 RUNS_TO_PLOT = 5
-OUTPUT_FOLDER = 'out_test' if env == 'test' else 'out'
+OUTPUT_FOLDER = 'out_test_debug' if env == 'test' else 'out'
 RUN_STATS_NAMES = [
     'NI', 'F_found', 'F_avg',
-    'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg',
-    'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg',
+    'RR_start', 'RR_fin', 'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg',
+    'Teta_start', 'Teta_fin', 'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg',
+    'unique_X_start', 'unique_X_fin',
     'I_start', 'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
     's_min', 'NI_s_min', 's_max', 'NI_s_max', 's_avg',
     'GR_start', 'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg'
