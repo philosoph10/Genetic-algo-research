@@ -59,6 +59,10 @@ class ExperimentStats:
         self.Sigma_I_min = None
         self.Sigma_I_max = None
         self.Sigma_I_avg = None
+        self.Min_I_start = None
+        self.Max_I_start = None
+        self.Avg_I_start = None
+        self.Sigma_I_start = None
 
         # Selection Difference
         self.Min_s_min = None
@@ -79,6 +83,10 @@ class ExperimentStats:
         self.Min_GR_avg = None
         self.Max_GR_avg = None
         self.Avg_GR_avg = None
+        self.Min_GR_start = None
+        self.Max_GR_start = None
+        self.Avg_GR_start = None
+        self.Sigma_GR_start = None
 
     def add_run(self, run: RunStats, run_i):
         self.runs[run_i] = run
@@ -188,11 +196,18 @@ class ExperimentStats:
         if I_avg_list:
             self.Avg_I_avg = np.mean(I_avg_list)
             self.Sigma_I_avg = np.std(I_avg_list)
+        I_start_list = [run.I_start for run in runs]
+        if I_start_list:
+            self.Min_I_start = min(I_start_list)
+            self.Max_I_start = max(I_start_list)
+            self.Avg_I_start = np.mean(I_start_list)
+            self.Sigma_I_start = np.std(I_start_list)
 
     def __calculate_gr_stats(self, runs: list[RunStats]):
         gre_list = [run.GR_early for run in runs]
         grl_list = [run.GR_late for run in runs if run.GR_late is not None]
         gra_list = [run.GR_avg for run in runs]
+        grs_list = [run.GR_start for run in runs]
         if gre_list:
             self.Avg_GR_early = np.mean(gre_list)
             self.Min_GR_early = min(gre_list)
@@ -205,6 +220,11 @@ class ExperimentStats:
             self.Avg_GR_avg = np.mean(gra_list)
             self.Min_GR_avg = min(gra_list)
             self.Max_GR_avg = max(gra_list)
+        if grs_list:
+            self.Min_GR_start = min(grs_list)
+            self.Max_GR_start = max(grs_list)
+            self.Avg_GR_start = np.mean(grs_list)
+            self.Sigma_GR_start = np.std(grs_list)
     
     def __calculate_non_suc_stats(self, runs: list[RunStats]):
         nonNIs = [run.NI for run in runs]

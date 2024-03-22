@@ -45,13 +45,15 @@ EXP_STATS_NAMES = [
     'Min_I_min', 'NI_I_min', 'Max_I_max', 'NI_I_max',
     'Avg_I_min', 'Avg_I_max', 'Avg_I_avg',
     'Sigma_I_min', 'Sigma_I_max', 'Sigma_I_avg',
+    'Min_I_start', 'Max_I_start', 'Avg_I_start', 'Sigma_I_start',
     
     'Min_s_min', 'NI_s_min', 'Max_s_max', 'NI_s_max',
     'Avg_s_min', 'Avg_s_max', 'Avg_s_avg',
     
     'Min_GR_early', 'Max_GR_early', 'Avg_GR_early',
     'Min_GR_late', 'Max_GR_late', 'Avg_GR_late',
-    'Min_GR_avg', 'Max_GR_avg', 'Avg_GR_avg'
+    'Min_GR_avg', 'Max_GR_avg', 'Avg_GR_avg',
+    'Min_GR_start', 'Max_GR_start', 'Avg_GR_start', 'Sigma_GR_start'
 ]
 FCONSTALL_RUN_STATS_NAMES = [
     'NI',
