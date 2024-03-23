@@ -66,8 +66,9 @@ class FHD(FitnessFunc):
 
 
 class FH(FitnessFunc):
-    def __init__(self, chr_length, encoder: Encoder):
-        super().__init__(chr_length)
+    def __init__(self, encoder: Encoder):
+        super().__init__(encoder.length)
+        self.chr_length = encoder.length
         self.encoder = encoder
 
     def apply(self, genotype):
@@ -254,22 +255,24 @@ class Deb4(FitnessFunc):
 
 if __name__ == "__main__":
     from model.encoding import *
-    # fh = FH(7, BinaryEncoder(7))
-    # genotype = np.array([b'0', b'0', b'0', b'1', b'0', b'0', b'1'])
-    # print(fh.apply(genotype))
-    # # print(fh.apply(b'0')) # raises ValueError
-    # print(fh.get_optimal())
-    # print(fh.get_phenotype(genotype))
-    # # print(fh.get_phenotype(b'1')) # raises ValueError
+    print("---------------------------")
+    print("FH")
+    fh = FH(BinaryEncoder(7))
+    genotype = np.array([b'0', b'0', b'0', b'1', b'0', b'0', b'1'])
+    print(f'The fitness of {genotype} is: {fh.apply(genotype)}')
+    # print(fh.apply(b'0')) # raises ValueError
+    print(f'The optimal chromosome is: {fh.get_optimal()}')
+    print(f'The phenotype of {genotype} is: {fh.get_phenotype(genotype)}')
+    # print(fh.get_phenotype(b'1')) # raises ValueError
 
-    # print("---------------------------")
-    # print("Rastrigin")
-    # float_enc = FloatEncoder(-5.12, 5.11, 10)
-    # x = 0
-    # x_enc = float_enc.encode(x)
-    # rastrigin = Rastrigin(7, float_enc)
-    # print(f"f(0) = {rastrigin.apply(x_enc)}")
-    # print(f"The optimal phenotype is: {rastrigin.get_phenotype(rastrigin.get_optimal().genotype)}")
+    print("---------------------------")
+    print("Rastrigin")
+    float_enc = FloatEncoder(-5.12, 5.11, 10)
+    x = 0
+    x_enc = float_enc.encode(x)
+    rastrigin = Rastrigin(7, float_enc)
+    print(f"f(0) = {rastrigin.apply(x_enc)}")
+    print(f"The optimal phenotype is: {rastrigin.get_phenotype(rastrigin.get_optimal().genotype)}")
 
     print("---------------------------")
     print("Decreasing maxima, Deb’s test function 2")
