@@ -121,6 +121,7 @@ def __plot_phenotype_distribution(
         population: Population,
         param_names: tuple[str],
         run_i, gen_i):
+    
     param_hierarchy = __get_path_hierarchy(param_names, run_i) + ['phenotype']
     path = '/'.join(param_hierarchy)
 
@@ -178,5 +179,6 @@ def __get_path_hierarchy(param_names, run_i):
         str(N),
         param_names[1], # selection method
         param_names[2], # genetic operator
+        param_names[3], # initial population
         str(run_i)
     ]
