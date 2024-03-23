@@ -55,9 +55,33 @@ class RunStats:
         self.NI_GR_late = None
         self.GR_avg = None
 
+        # Selection Pressure
+        self.Pr_start = None
+        self.Pr_min = None
+        self.NI_Pr_min = None
+        self.Pr_max = None
+        self.NI_Pr_max = None
+        self.Pr_avg = None
+
+        # Fisher's Exact Test for Selection Pressure
+        self.Fish_start = None
+        self.Fish_min = None
+        self.NI_Fish_min = None
+        self.Fish_max = None
+        self.NI_Fish_max = None
+        self.Fish_avg = None
+
+        # Kendall's Tau-b Test for Selection Pressure
+        self.Kend_start = None
+        self.Kend_min = None
+        self.NI_Kend_min = None
+        self.Kend_max = None
+        self.NI_Kend_max = None
+        self.Kend_avg = None
+
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
         # Reproduction Rate
-        if gen_i == 0:
+        if self.RR_start is None:
             self.RR_start = gen_stats.reproduction_rate
         self.RR_fin = gen_stats.reproduction_rate
         if self.RR_min is None or gen_stats.reproduction_rate < self.RR_min:
@@ -72,7 +96,7 @@ class RunStats:
             self.RR_avg = (self.RR_avg * (gen_i - 1) + gen_stats.reproduction_rate) / gen_i
 
         # Loss of Diversity
-        if gen_i == 0:
+        if self.Teta_start is None:
             self.Teta_start = gen_stats.loss_of_diversity
         self.Teta_fin = gen_stats.loss_of_diversity
         if self.Teta_min is None or gen_stats.loss_of_diversity < self.Teta_min:
@@ -87,13 +111,13 @@ class RunStats:
             self.Teta_avg = (self.Teta_avg * (gen_i - 1) + gen_stats.loss_of_diversity) / gen_i
         
         # Unique chromosomes
-        if gen_i == 0:
+        if self.unique_X_start is None:
             self.unique_X_start = gen_stats.n_unique
         self.unique_X_fin = gen_stats.n_unique
 
         if self.param_names[0] != 'FconstALL':
             # Selection Intensity
-            if gen_i == 0:
+            if self.I_start is None:
                 self.I_start = gen_stats.intensity
             if self.I_min is None or gen_stats.intensity < self.I_min:
                 self.I_min = gen_stats.intensity
@@ -119,7 +143,7 @@ class RunStats:
                 self.s_avg = (self.s_avg * (gen_i - 1) + gen_stats.difference) / gen_i
 
             # Growth Rate
-            if gen_i == 0:
+            if self.GR_start is None:
                 self.GR_start = gen_stats.growth_rate
             if gen_i == 2:
                 self.GR_early = gen_stats.growth_rate
@@ -130,6 +154,48 @@ class RunStats:
                 self.GR_avg = gen_stats.growth_rate
             else:
                 self.GR_avg = (self.GR_avg * (gen_i - 1) + gen_stats.growth_rate) / gen_i
+            
+            # Selection Pressure
+            if self.Pr_start is None:
+                self.Pr_start = gen_stats.pr
+            if self.Pr_min is None or self.Pr_min > gen_stats.pr:
+                self.Pr_min = gen_stats.pr
+                self.NI_Pr_min = gen_i
+            if self.Pr_max is None or self.Pr_max < gen_stats.pr:
+                self.Pr_max = gen_stats.pr
+                self.NI_Pr_max = gen_i
+            if self.Pr_avg is None:
+                self.Pr_avg = gen_stats.pr
+            else:
+                self.Pr_avg = (self.Pr_avg * (gen_i - 1) + gen_stats.pr) / gen_i
+            
+            # Fisher's Exact Test for Selection Pressure
+            if self.Fish_start is None:
+                self.Fish_start = gen_stats.P_FET
+            if self.Fish_min is None or self.Fish_min > gen_stats.P_FET:
+                self.Fish_min = gen_stats.P_FET
+                self.NI_Fish_min = gen_i
+            if self.Fish_max is None or self.Fish_max < gen_stats.P_FET:
+                self.Fish_max = gen_stats.P_FET
+                self.NI_Fish_max = gen_i
+            if self.Fish_avg is None:
+                self.Fish_avg = gen_stats.P_FET
+            else:
+                self.Fish_avg = (self.Fish_avg * (gen_i - 1) + gen_stats.P_FET) / gen_i
+            
+            # Kendall's Tau-b Test for Selection Pressure
+            if self.Kend_start is None:
+                self.Kend_start = gen_stats.Kendall_tau
+            if self.Kend_min is None or self.Kend_min > gen_stats.Kendall_tau:
+                self.Kend_min = gen_stats.Kendall_tau
+                self.NI_Kend_min = gen_i
+            if self.Kend_max is None or self.Kend_max < gen_stats.Kendall_tau:
+                self.Kend_max = gen_stats.Kendall_tau
+                self.NI_Kend_max = gen_i
+            if self.Kend_avg is None:
+                self.Kend_avg = gen_stats.Kendall_tau
+            else:
+                self.Kend_avg = (self.Kend_avg * (gen_i - 1) + gen_stats.Kendall_tau) / gen_i
 
     def update_final_stats(self, gen_stats: GenerationStats, gen_i):
         if self.param_names[0] != 'FconstALL':

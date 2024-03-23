@@ -27,7 +27,10 @@ RUN_STATS_NAMES = [
     'unique_X_start', 'unique_X_fin',
     'I_start', 'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
     's_min', 'NI_s_min', 's_max', 'NI_s_max', 's_avg',
-    'GR_start', 'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg'
+    'GR_start', 'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg',
+    'Pr_start', 'Pr_min', 'NI_Pr_min', 'Pr_max', 'NI_Pr_max', 'Pr_avg',
+    'Fish_start', 'Fish_min', 'NI_Fish_min', 'Fish_max', 'NI_Fish_max', 'Fish_avg',
+    'Kend_start', 'Kend_min', 'NI_Kend_min', 'Kend_max', 'NI_Kend_max', 'Kend_avg'
 ]
 EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',
