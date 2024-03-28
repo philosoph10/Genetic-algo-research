@@ -15,22 +15,37 @@ def centered_scaling(ps: float):
 
 if env == 'test':
     fitness_functions = [
-        # (FconstALL(100), 'FconstALL'),
+        (FconstALL(100), 'FconstALL'),
         (FH(BinaryEncoder(100)), 'FH'),
-        # (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2')
+        (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2'),
+        (Fx2(FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fx2_gray'),
+        (F5122subx2(FloatEncoder(-5.12, 5.11, 10)), 'F5122subx2'),
+        (F5122subx2(FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'F5122subx2_gray'),
+        (Fexp(0.25, FloatEncoder(0.0, 10.23, 10)), 'Fexp0.25'),
+        (Fexp(0.25, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp0.25_gray'),
+        (Fexp(1, FloatEncoder(0.0, 10.23, 10)), 'Fexp1'),
+        (Fexp(1, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp1_gray'),
+        (Fexp(2, FloatEncoder(0.0, 10.23, 10)), 'Fexp2'),
+        (Fexp(2, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp2_gray'),
+        (Rastrigin(FloatEncoder(-5.12, 5.11, 10)), 'Rastrigin'),
+        (Rastrigin(FloatEncoder(-5.12, 5.11, 10, is_gray=True)), 'Rastrigin_gray'),
+        (Deb2(FloatEncoder(0, 1.023, 10)), 'Deb2'),
+        (Deb2(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Deb2_gray'),
+        (Deb4(FloatEncoder(0, 1.023, 10)), 'Deb4'),
+        (Deb4(FloatEncoder(0, 1.023, 10, is_gray=True)), 'Deb4_gray')
     ]
     selection_methods = [
         # (RWS(), 'RWS'),
-        # (SUS(), 'SUS'),
-        (ScaledRWS(1., np.mean), 'Mean RWS'),
+        (SUS(), 'SUS'),
+        # (ScaledRWS(1., np.mean), 'Mean RWS'),
         # (ScaledSUS(1., centered_scaling(1.2)), 'Centred SUS, ps=1.2')
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators')
     ]
     population_inits = [
-        # (0, 'no optimal chromosomes'),
-        # (1, '1 optimal chromosome'),
+        (1, '1 optimal chromosome'),
+        (0.05, "5% optimal chromosomes"),
         (0.1, "10% optimal chromosomes")
     ]
 else:
