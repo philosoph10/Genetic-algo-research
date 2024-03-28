@@ -42,10 +42,18 @@ EXP_STATS_NAMES = [
     'Min_RR_min', 'NI_RR_min', 'Max_RR_max', 'NI_RR_max',
     'Avg_RR_min', 'Avg_RR_max', 'Avg_RR_avg',
     'Sigma_RR_min', 'Sigma_RR_max', 'Sigma_RR_avg',
+    'Avg_RR_start', 'Avg_RR_fin', 'Sigma_RR_start',
+    'Sigma_RR_fin', 'Min_RR_start', 'Max_RR_start',
 
     'Min_Teta_min', 'NI_Teta_min', 'Max_Teta_max', 'NI_Teta_max',
     'Avg_Teta_min', 'Avg_Teta_max', 'Avg_Teta_avg',
     'Sigma_Teta_min', 'Sigma_Teta_max', 'Sigma_Teta_avg',
+    'Avg_Teta_start', 'Avg_Teta_fin', 'Sigma_Teta_start',
+    'Sigma_Teta_fin', 'Min_Teta_start', 'Max_Teta_start',
+
+    'Avg_unique_X_start', 'Avg_unique_X_fin', 'Sigma_unique_X_start',
+    'Sigma_unique_X_fin', 'Min_unique_X_start', 'Max_unique_X_start',
+    'Min_unique_X_fin', 'Max_unique_X_fin',
     
     'Min_I_min', 'NI_I_min', 'Max_I_max', 'NI_I_max',
     'Avg_I_min', 'Avg_I_max', 'Avg_I_avg',
