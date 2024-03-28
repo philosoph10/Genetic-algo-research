@@ -1,4 +1,4 @@
-from config import N, NR, OUTPUT_FOLDER, RUN_STATS_NAMES, EXP_STATS_NAMES, FCONSTALL_RUN_STATS_NAMES, FCONSTALL_EXP_STATS_NAMES, DISTRIBUTIONS_TO_PLOT, GEN_STATS_NAMES
+from config import N, NR, OUTPUT_FOLDER, RUN_STATS_NAMES, EXP_STATS_NAMES, FCONSTALL_RUN_STATS_NAMES, FCONSTALL_EXP_STATS_NAMES, DISTRIBUTIONS_TO_PLOT, GEN_STATS_NAMES, FCONSTALL_GEN_STATS_NAMES
 import xlsxwriter
 import os
 from stats.experiment_stats import ExperimentStats
@@ -114,16 +114,28 @@ def write_generation_stats(generation_stats_list, param_names, run_i):
     worksheet.freeze_panes(1, 1)
 
     worksheet.write(0, 0, 'Generation number')
-    for col in range(len(GEN_STATS_NAMES)):
-        worksheet.write(0, col + 1, GEN_STATS_NAMES[col])
-
-    for i in range(DISTRIBUTIONS_TO_PLOT):
-        row = i + 1
-        gen_stats = generation_stats_list[i]
-        # write generation number
-        worksheet.write(row, 0, i + 1)
+    if param_names[0] != 'FconstALL':
         for col in range(len(GEN_STATS_NAMES)):
-            worksheet.write(row, col + 1, getattr(gen_stats, GEN_STATS_NAMES[col]))
+            worksheet.write(0, col + 1, GEN_STATS_NAMES[col])
+
+        for i in range(DISTRIBUTIONS_TO_PLOT):
+            row = i + 1
+            gen_stats = generation_stats_list[i]
+            # write generation number
+            worksheet.write(row, 0, i + 1)
+            for col in range(len(GEN_STATS_NAMES)):
+                worksheet.write(row, col + 1, getattr(gen_stats, GEN_STATS_NAMES[col]))
+    else:
+        for col in range(len(FCONSTALL_GEN_STATS_NAMES)):
+            worksheet.write(0, col + 1, FCONSTALL_GEN_STATS_NAMES[col])
+
+        for i in range(DISTRIBUTIONS_TO_PLOT):
+            row = i + 1
+            gen_stats = generation_stats_list[i]
+            # write generation number
+            worksheet.write(row, 0, i + 1)
+            for col in range(len(FCONSTALL_GEN_STATS_NAMES)):
+                worksheet.write(row, col + 1, getattr(gen_stats, FCONSTALL_GEN_STATS_NAMES[col]))
     
     workbook.close()
 

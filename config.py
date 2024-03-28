@@ -1,5 +1,5 @@
 # environment parameters
-env = 'test'
+env = 'prod'
 THREADS = 16
 
 # run parameters
@@ -80,7 +80,10 @@ EXP_STATS_NAMES = [
 ]
 GEN_STATS_NAMES = [
     'f_avg', 'f_std', 'f_best', 'num_of_best', 'optimal_count', 'growth_rate', 'difference',
-    'intensity', 'reproduction_rate', 'loss_of_diversity', 'n_unique', 'Pr', 'P_FET', 'Kendall_tau'
+    'intensity', 'reproduction_rate', 'loss_of_diversity', 'n_unique', 'pr', 'P_FET', 'Kendall_tau'
+]
+FCONSTALL_GEN_STATS_NAMES = [
+    'reproduction_rate', 'loss_of_diversity', 'n_unique'
 ]
 FCONSTALL_RUN_STATS_NAMES = [
     'NI',
