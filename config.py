@@ -18,7 +18,7 @@ get_pop_seed = lambda run_i: 1381*run_i + 5912826
 
 # output parameters
 DISTRIBUTIONS_TO_PLOT = 5
-DISTRIBUTION_RATE_TO_PLOT = 10 if env == 'test' else 10000
+DISTRIBUTION_RATE_TO_PLOT = 10 if env == 'test' else 1000
 RUNS_TO_PLOT = 5
 OUTPUT_FOLDER = 'out_test_debug' if env == 'test' else 'out'
 RUN_STATS_NAMES = [
@@ -79,8 +79,8 @@ EXP_STATS_NAMES = [
     'Avg_Kend_start', 'Sigma_Kend_start'
 ]
 GEN_STATS_NAMES = [
-    'f_avg', 'f_best', 'num_of_best', 'optimal_count', 'growth_rate', 'difference',
-    'intensity', 'reproduction_rate', 'loss_of_diversity', 'n_unique', 'P_FET', 'Kendall_tau'
+    'f_avg', 'f_std', 'f_best', 'num_of_best', 'optimal_count', 'growth_rate', 'difference',
+    'intensity', 'reproduction_rate', 'loss_of_diversity', 'n_unique', 'Pr', 'P_FET', 'Kendall_tau'
 ]
 FCONSTALL_RUN_STATS_NAMES = [
     'NI',
