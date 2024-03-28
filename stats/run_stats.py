@@ -42,6 +42,7 @@ class RunStats:
         self.I_avg = None
 
         # Selection Difference
+        self.s_start = None
         self.s_min = None
         self.NI_s_min = None
         self.s_max = None
@@ -131,6 +132,8 @@ class RunStats:
                 self.I_avg = (self.I_avg * (gen_i - 1) + gen_stats.intensity) / gen_i
 
             # Selection Difference
+            if self.s_start is None:
+                self.s_start = gen_stats.difference
             if self.s_min is None or gen_stats.difference < self.s_min:
                 self.s_min = gen_stats.difference
                 self.NI_s_min = gen_i

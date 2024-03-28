@@ -27,7 +27,7 @@ RUN_STATS_NAMES = [
     'Teta_start', 'Teta_fin', 'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg',
     'unique_X_start', 'unique_X_fin',
     'I_start', 'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
-    's_min', 'NI_s_min', 's_max', 'NI_s_max', 's_avg',
+    's_start', 's_min', 'NI_s_min', 's_max', 'NI_s_max', 's_avg',
     'GR_start', 'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg',
     'Pr_start', 'Pr_min', 'NI_Pr_min', 'Pr_max', 'NI_Pr_max', 'Pr_avg',
     'Fish_start', 'Fish_min', 'NI_Fish_min', 'Fish_max', 'NI_Fish_max', 'Fish_avg',
@@ -62,6 +62,7 @@ EXP_STATS_NAMES = [
     
     'Min_s_min', 'NI_s_min', 'Max_s_max', 'NI_s_max',
     'Avg_s_min', 'Avg_s_max', 'Avg_s_avg',
+    'Min_s_start', 'Max_s_start', 'Avg_s_start', 'Sigma_s_start',
     
     'Min_GR_early', 'Max_GR_early', 'Avg_GR_early',
     'Min_GR_late', 'Max_GR_late', 'Avg_GR_late',

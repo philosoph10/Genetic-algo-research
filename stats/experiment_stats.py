@@ -94,6 +94,10 @@ class ExperimentStats:
         self.Avg_s_min = None
         self.Avg_s_max = None
         self.Avg_s_avg = None
+        self.Min_s_start = None
+        self.Max_s_start = None
+        self.Avg_s_start = None
+        self.Sigma_s_start = None
 
         # Growth Rate
         self.Min_GR_early = None
@@ -284,6 +288,12 @@ class ExperimentStats:
         s_avg_list = [run.s_avg for run in runs]
         if s_avg_list:
             self.Avg_s_avg = np.mean(s_avg_list)
+        s_start_list = [run.s_start for run in runs]
+        if s_start_list:
+            self.Min_s_start = min(s_start_list)
+            self.Max_s_start = max(s_start_list)
+            self.Avg_s_start = np.mean(s_start_list)
+            self.Sigma_s_start = np.std(s_start_list)
 
     def __calculate_i_stats(self, runs: list[RunStats]):
         I_min_list = [run.I_min for run in runs]
