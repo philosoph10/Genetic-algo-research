@@ -58,7 +58,25 @@ EXP_STATS_NAMES = [
     'Min_GR_early', 'Max_GR_early', 'Avg_GR_early',
     'Min_GR_late', 'Max_GR_late', 'Avg_GR_late',
     'Min_GR_avg', 'Max_GR_avg', 'Avg_GR_avg',
-    'Min_GR_start', 'Max_GR_start', 'Avg_GR_start', 'Sigma_GR_start'
+    'Min_GR_start', 'Max_GR_start', 'Avg_GR_start', 'Sigma_GR_start',
+
+    'Min_Pr_min', 'NI_Pr_min', 'Max_Pr_max',
+    'NI_Pr_max', 'Avg_Pr_min', 'Avg_Pr_max',
+    'Avg_Pr_avg', 'Sigma_Pr_min', 'Sigma_Pr_max',
+    'Sigma_Pr_avg', 'Min_Pr_start', 'Max_Pr_start',
+    'Avg_Pr_start', 'Sigma_Pr_start',
+
+    'Min_Fish_min', 'NI_Fish_min', 'Max_Fish_max',
+    'NI_Fish_max', 'Avg_Fish_min', 'Avg_Fish_max',
+    'Avg_Fish_avg', 'Sigma_Fish_min', 'Sigma_Fish_max',
+    'Sigma_Fish_avg', 'Min_Fish_start', 'Max_Fish_start',
+    'Avg_Fish_start', 'Sigma_Fish_start',
+
+    'Min_Kend_min', 'NI_Kend_min', 'Max_Kend_max',
+    'NI_Kend_max', 'Avg_Kend_min', 'Avg_Kend_max',
+    'Avg_Kend_avg', 'Sigma_Kend_min', 'Sigma_Kend_max',
+    'Sigma_Kend_avg', 'Min_Kend_start', 'Max_Kend_start',
+    'Avg_Kend_start', 'Sigma_Kend_start'
 ]
 GEN_STATS_NAMES = [
     'f_avg', 'f_best', 'num_of_best', 'optimal_count', 'growth_rate', 'difference',

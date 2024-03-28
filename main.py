@@ -15,21 +15,21 @@ def centered_scaling(ps: float):
 
 if env == 'test':
     fitness_functions = [
-        (FconstALL(100), 'FconstALL'),
-        # (FH(BinaryEncoder(100)), 'FH'),
-        (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2')
+        # (FconstALL(100), 'FconstALL'),
+        (FH(BinaryEncoder(100)), 'FH'),
+        # (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2')
     ]
     selection_methods = [
         # (RWS(), 'RWS'),
-        (SUS(), 'SUS'),
-        # (ScaledRWS(1., np.mean), 'Mean RWS'),
+        # (SUS(), 'SUS'),
+        (ScaledRWS(1., np.mean), 'Mean RWS'),
         # (ScaledSUS(1., centered_scaling(1.2)), 'Centred SUS, ps=1.2')
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators')
     ]
     population_inits = [
-        (0, 'no optimal chromosomes'),
+        # (0, 'no optimal chromosomes'),
         # (1, '1 optimal chromosome'),
         (0.1, "10% optimal chromosomes")
     ]
