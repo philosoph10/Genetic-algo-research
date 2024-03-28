@@ -16,7 +16,7 @@ def centered_scaling(ps: float):
 if env == 'test':
     fitness_functions = [
         (FconstALL(100), 'FconstALL'),
-        # (FHD(100, 100), 'FHD'),
+        # (FH(BinaryEncoder(100)), 'FH'),
         (Fx2(FloatEncoder(0.0, 10.23, 10)), 'Fx2')
     ]
     selection_methods = [
@@ -30,7 +30,7 @@ if env == 'test':
     ]
     population_inits = [
         (0, 'no optimal chromosomes'),
-        (1, '1 optimal chromosome'),
+        # (1, '1 optimal chromosome'),
         (0.1, "10% optimal chromosomes")
     ]
 else:
@@ -90,6 +90,8 @@ def validate_params(ff: FitnessFunc, sm: SelectionMethod, go: GeneticOperator, p
     """
     validate the parameter set with respect to population initialization
     """
+    if isinstance(ff, FconstALL) and pi == 0:
+        return True
     if isinstance(ff, FconstALL) and (not isinstance(pi, int) or pi != 1):
         return False
     if issubclass(go, BlankGenOperator) and pi == 0:
@@ -120,6 +122,8 @@ if __name__ == '__main__':
         # add respective populations to each parameter configuration
         # params[2] is the population initialization parameter
         params = [params + (populations[params[2]],) for params in exp_params]
+        if len(params) == 0:
+            continue
         # print(f'function = {ff}')
         # for i, param in enumerate(params):
         #     print(f'param[{i}] = {param}')

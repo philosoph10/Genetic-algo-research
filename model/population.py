@@ -59,6 +59,20 @@ class Population:
             if percentage > 0.01 and percentage < 0.99:
                 return False
         return True
+    
+    def is_homogeneous_frac(self, frac):
+        """
+        check if the population is homogenous by at least (frac*100) percent
+        :param frac: 0.5 < frac < 1 - fraction of the population that should have the same value for every gene
+        :return: True, if the population satisfies the statement above, False, otherwise
+        """
+        l = self.fitness_function.chr_length
+        for i in range(l):
+            n_zeros = len([True for g in self.genotypes if g[i] == b'0'])
+            percentage = n_zeros / N
+            if percentage > (1 - frac) and percentage < frac:
+                return False
+        return True
 
     def is_homogenous_100(self):
             return all([np.array_equal(geno, self.genotypes[0]) for geno in self.genotypes[1:]])

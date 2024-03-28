@@ -49,15 +49,22 @@ def plot_run_stats(
         kendall_taus = [gen_stats.Kendall_tau for gen_stats in gen_stats_list]
         __plot_stat(kendall_taus, param_names, run_i, 'Kendall Tau-b Pressure Test', 'kendall_tau')
 
+        fraction_of_best = [gen_stats.num_of_best / N for gen_stats in gen_stats_list]
+        __plot_stat(fraction_of_best, param_names, run_i, 'Fraction of best individual accross generation', 'fraction_of_best')
+
+        ns_unique = [gen_stats.n_unique for gen_stats in gen_stats_list]
+        __plot_stat(ns_unique, param_names, run_i, '#unique chromosomes', 'n_unique')
+                    
+
 def plot_generation_stats(
         population: Population,
         param_names: tuple[str],
-        run_i, gen_i):
-    __plot_genotype_distribution(population, param_names, run_i, gen_i)
+        run_i, gen_i, homogeneous_frac=None):
+    __plot_genotype_distribution(population, param_names, run_i, gen_i, homogeneous_frac=homogeneous_frac)
     if param_names[0] != 'FconstALL':
-        __plot_fitness_distribution(population, param_names, run_i, gen_i)
+        __plot_fitness_distribution(population, param_names, run_i, gen_i, homogeneous_frac=homogeneous_frac)
     if param_names[0] not in ['FconstALL', 'FHD', 'FH']:
-        __plot_phenotype_distribution(population, param_names, run_i, gen_i)
+        __plot_phenotype_distribution(population, param_names, run_i, gen_i, homogeneous_frac=homogeneous_frac)
 
 
 def __plot_stat(
@@ -101,9 +108,12 @@ def __plot_stat2(
 def __plot_fitness_distribution(
         population: Population,
         param_names: tuple[str],
-        run_i, gen_i):
+        run_i, gen_i, homogeneous_frac=None):
     param_hierarchy = __get_path_hierarchy(param_names, run_i) + ['fitness']
     path = '/'.join(param_hierarchy)
+
+    if homogeneous_frac is not None:
+        path = os.path.join(path, f'homogeneous_{int(homogeneous_frac*100)}')
 
     if not os.path.exists(path):
         os.makedirs(path)
@@ -120,10 +130,13 @@ def __plot_fitness_distribution(
 def __plot_phenotype_distribution(
         population: Population,
         param_names: tuple[str],
-        run_i, gen_i):
+        run_i, gen_i, homogeneous_frac=None):
     
     param_hierarchy = __get_path_hierarchy(param_names, run_i) + ['phenotype']
     path = '/'.join(param_hierarchy)
+
+    if homogeneous_frac is not None:
+        path = os.path.join(path, f'homogeneous_{int(homogeneous_frac*100)}')
 
     if not os.path.exists(path):
         os.makedirs(path)
@@ -143,9 +156,11 @@ def __plot_phenotype_distribution(
 def __plot_genotype_distribution(
         population: Population,
         param_names: tuple[str],
-        run_i, gen_i):
+        run_i, gen_i, homogeneous_frac=None):
     param_hierarchy = __get_path_hierarchy(param_names, run_i) + ['genotype']
     path = '/'.join(param_hierarchy)
+    if homogeneous_frac is not None:
+        path = os.path.join(path, f'homogeneous_{int(homogeneous_frac*100)}')
 
     if not os.path.exists(path):
         os.makedirs(path)

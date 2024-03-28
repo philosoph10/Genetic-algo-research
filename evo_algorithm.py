@@ -4,7 +4,7 @@ from selection.selection_method import SelectionMethod
 from model.gen_operators import GeneticOperator
 from stats.run_stats import RunStats
 from stats.generation_stats import GenerationStats
-from output import plotting
+from output import plotting, excel
 
 
 class EvoAlgorithm:
@@ -48,14 +48,18 @@ class EvoAlgorithm:
         self.run_stats.is_successful = self.__check_success(gen_stats)
 
         if run_i < RUNS_TO_PLOT:
+            # print(f'Generation stats list = {self.gen_stats_list}')
+            excel.write_generation_stats(self.gen_stats_list, self.param_names, run_i)
             plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
             plotting.plot_run_stats(self.gen_stats_list, self.param_names, run_i)
 
         return self.run_stats
 
     def __calculate_stats_and_evolve(self, run_i):
-        if run_i < RUNS_TO_PLOT and self.gen_i < DISTRIBUTIONS_TO_PLOT:
+        if run_i < RUNS_TO_PLOT and (self.gen_i < DISTRIBUTIONS_TO_PLOT or self.gen_i % DISTRIBUTION_RATE_TO_PLOT == 0):
             plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
+        # if run_i < RUNS_TO_PLOT and self.population.is_homogeneous_frac(0.9):
+        #     plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i, homogeneous_frac=0.9)
         
         gen_stats = GenerationStats(self.population, self.param_names)
         if run_i < RUNS_TO_PLOT:
@@ -70,7 +74,7 @@ class EvoAlgorithm:
         return gen_stats
 
     def __calculate_final_stats(self, run_i):
-        if run_i < RUNS_TO_PLOT and self.gen_i < DISTRIBUTIONS_TO_PLOT:
+        if run_i < RUNS_TO_PLOT and (self.gen_i < DISTRIBUTIONS_TO_PLOT or self.gen_i % DISTRIBUTION_RATE_TO_PLOT == 0):
             plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
 
         gen_stats = GenerationStats(self.population, self.param_names)

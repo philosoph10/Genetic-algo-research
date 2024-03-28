@@ -1,4 +1,4 @@
-from config import N, NR, OUTPUT_FOLDER, RUN_STATS_NAMES, EXP_STATS_NAMES, FCONSTALL_RUN_STATS_NAMES, FCONSTALL_EXP_STATS_NAMES
+from config import N, NR, OUTPUT_FOLDER, RUN_STATS_NAMES, EXP_STATS_NAMES, FCONSTALL_RUN_STATS_NAMES, FCONSTALL_EXP_STATS_NAMES, DISTRIBUTIONS_TO_PLOT, GEN_STATS_NAMES
 import xlsxwriter
 import os
 from stats.experiment_stats import ExperimentStats
@@ -26,7 +26,7 @@ def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
         'border': 1,
         'align': 'center',
         'fg_color': 'yellow'})
-    worksheet.freeze_panes(2, 2)
+    worksheet.freeze_panes(2, 3)
     
     for exp_i, experiment_stats in enumerate(experiment_stats_list):
         # print(f"!!!!\n\tExperiment stats = {experiment_stats.params}\n!!!!")
@@ -73,7 +73,7 @@ def write_aggregated_stats(experiment_stats_list: list[ExperimentStats]):
     workbook = xlsxwriter.Workbook(f'{path}/{filename}')
     worksheet = workbook.add_worksheet()
     worksheet.name = 'aggregated'
-    worksheet.freeze_panes(1, 3)
+    worksheet.freeze_panes(1, 4)
 
     for exp_i, experiment_stats in enumerate(experiment_stats_list):
         if exp_i == 0:
@@ -95,3 +95,46 @@ def write_aggregated_stats(experiment_stats_list: list[ExperimentStats]):
                 worksheet.write(0, col, stat_name)
 
     workbook.close()
+
+def write_generation_stats(generation_stats_list, param_names, run_i):
+    """
+    Write statistics of a generation to excel
+    :param generation_stats_list: list of generation statistics
+    :param param_names: list of parameters, defining the path
+    :param run_i: number of the run of the GA
+    """
+    path = __get_path_hierarchy(param_names, run_i)
+    path = os.path.join(*path)
+    os.makedirs(path, exist_ok=True)
+    filename = f'{run_i}.xlsx'
+
+    workbook = xlsxwriter.Workbook(os.path.join(path, filename))
+    worksheet = workbook.add_worksheet()
+    worksheet.name = f'Run: {run_i}'
+    worksheet.freeze_panes(1, 1)
+
+    worksheet.write(0, 0, 'Generation number')
+    for col in range(len(GEN_STATS_NAMES)):
+        worksheet.write(0, col + 1, GEN_STATS_NAMES[col])
+
+    for i in range(DISTRIBUTIONS_TO_PLOT):
+        row = i + 1
+        gen_stats = generation_stats_list[i]
+        # write generation number
+        worksheet.write(row, 0, i + 1)
+        for col in range(len(GEN_STATS_NAMES)):
+            worksheet.write(row, col + 1, getattr(gen_stats, GEN_STATS_NAMES[col]))
+    
+    workbook.close()
+
+def __get_path_hierarchy(param_names, run_i):
+    return [
+        OUTPUT_FOLDER,
+        'tables',
+        param_names[0], # fitness function
+        str(N),
+        param_names[1], # selection method
+        param_names[2], # genetic operator
+        param_names[3], # initial population
+        str(run_i)
+    ]
