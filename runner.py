@@ -50,10 +50,7 @@ def run(init_population: Population,
         population_init,
         param_names: tuple[str],
         run_i: int):
-    # if isinstance(selection_method, ScaledRWS):
-    #     sm_obj = selection_method
-    # else:
-    #     sm_obj = selection_method()
-    sm_obj = selection_method
+    sm_obj = copy(selection_method)
+    # print(f'F_Min = {sm_obj.f_min}')
     current_run = EvoAlgorithm(deepcopy(init_population), sm_obj, genetic_operator, population_init, param_names).run(run_i)
     return (run_i, current_run)

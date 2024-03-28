@@ -86,6 +86,10 @@ class Population:
     def get_fitness_max(self):
         res = np.max(self.fitnesses)
         return res
+    
+    def get_fitness_min(self):
+        res = np.min(self.fitnesses)
+        return res
 
     def get_fitness_avg(self):
         return np.mean(self.fitnesses)
