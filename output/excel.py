@@ -40,7 +40,9 @@ def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
         for run_i, run_stats in enumerate(experiment_stats.runs):
             for stat_i, stat_name in enumerate(run_stats_names):
                 col = run_i * run_stats_count + stat_i + 3
-                worksheet.write(row, col, getattr(run_stats, stat_name))
+                value = getattr(run_stats, stat_name)
+                __write_value_with_nan_inf_handling(worksheet, row, col-1, value)
+                # worksheet.write(row, col, getattr(run_stats, stat_name))
                 if exp_i == 0:
                     worksheet.write(1, col, stat_name)
 
@@ -50,7 +52,9 @@ def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
 
         for stat_i, stat_name in enumerate(exp_stats_names):
             col = run_stats_count * NR + stat_i + 3
-            worksheet.write(row, col, getattr(experiment_stats, stat_name))
+            value = getattr(experiment_stats, stat_name)
+            __write_value_with_nan_inf_handling(worksheet, row, col-1, value)
+            # worksheet.write(row, col, getattr(experiment_stats, stat_name))
             if exp_i == 0:
                     worksheet.write(1, col, stat_name)
 
@@ -91,7 +95,9 @@ def write_aggregated_stats(experiment_stats_list: list[ExperimentStats]):
         
         for stat_i, stat_name in enumerate(EXP_STATS_NAMES):
             col = stat_i + 4
-            worksheet.write(row, col, getattr(experiment_stats, stat_name))
+            value = getattr(experiment_stats, stat_name)
+            __write_value_with_nan_inf_handling(worksheet, row, col-1, value)
+            # worksheet.write(row, col, getattr(experiment_stats, stat_name))
             if exp_i == 0:
                 worksheet.write(0, col, stat_name)
 
