@@ -2,6 +2,7 @@ from config import N, NR, OUTPUT_FOLDER, RUN_STATS_NAMES, EXP_STATS_NAMES, FCONS
 import xlsxwriter
 import os
 from stats.experiment_stats import ExperimentStats
+import numpy as np
 
 def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
     ff_name = experiment_stats_list[0].params[0]
@@ -150,3 +151,15 @@ def __get_path_hierarchy(param_names, run_i):
         param_names[3], # initial population
         str(run_i)
     ]
+
+def __write_value_with_nan_inf_handling(worksheet, row, col, value):
+    if isinstance(value, float):
+        if np.isnan(value):
+            worksheet.write(row, col + 1, "NaN")
+        elif np.isinf(value):
+            worksheet.write(row, col + 1, "Inf")
+        else:
+            worksheet.write(row, col + 1, value)
+    else:
+        # Otherwise, write the actual value
+        worksheet.write(row, col + 1, value)
