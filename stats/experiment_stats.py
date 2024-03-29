@@ -255,10 +255,10 @@ class ExperimentStats:
             self.Sigma_I_start = np.std(I_start_list)
 
     def __calculate_gr_stats(self, runs: list[RunStats]):
-        gre_list = [run.GR_early for run in runs]
+        gre_list = [run.GR_early for run in runs if run.GR_early is not None]
         grl_list = [run.GR_late for run in runs if run.GR_late is not None]
-        gra_list = [run.GR_avg for run in runs]
-        grs_list = [run.GR_start for run in runs]
+        gra_list = [run.GR_avg for run in runs if run.GR_avg is not None]
+        grs_list = [run.GR_start for run in runs if run.GR_start is not None]
         if gre_list:
             self.Avg_GR_early = np.mean(gre_list)
             self.Min_GR_early = min(gre_list)
