@@ -133,7 +133,9 @@ def write_generation_stats(generation_stats_list, param_names, run_i):
             # write generation number
             worksheet.write(row, 0, i + 1)
             for col in range(len(GEN_STATS_NAMES)):
-                worksheet.write(row, col + 1, getattr(gen_stats, GEN_STATS_NAMES[col]))
+                value = getattr(gen_stats, GEN_STATS_NAMES[col])
+                __write_value_with_nan_inf_handling(worksheet, row, col, value)
+                # worksheet.write(row, col + 1, getattr(gen_stats, GEN_STATS_NAMES[col]))
     else:
         for col in range(len(FCONSTALL_GEN_STATS_NAMES)):
             worksheet.write(0, col + 1, FCONSTALL_GEN_STATS_NAMES[col])
