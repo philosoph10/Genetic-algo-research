@@ -126,6 +126,8 @@ def write_generation_stats(generation_stats_list, param_names, run_i):
             worksheet.write(0, col + 1, GEN_STATS_NAMES[col])
 
         for i in range(DISTRIBUTIONS_TO_PLOT):
+            if i >= len(generation_stats_list):
+                break
             row = i + 1
             gen_stats = generation_stats_list[i]
             # write generation number
