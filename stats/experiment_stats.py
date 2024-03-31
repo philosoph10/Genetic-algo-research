@@ -151,8 +151,6 @@ class ExperimentStats:
         self.runs[run_i] = run
 
     def calculate(self):
-        self.__calculate_loss_stats(self.runs)
-        
         successful_runs = [run for run in self.runs if run.is_successful]
         self.N_Suc = len(successful_runs)
         self.Suc = self.N_Suc / NR
@@ -162,6 +160,8 @@ class ExperimentStats:
         self.__calculate_teta_stats(successful_runs)
 
         if self.params[0] != 'FconstALL':
+            self.__calculate_loss_stats(self.runs)
+            
             non_successful_convergent_runs = [run for run in self.runs 
                                           if (not run.is_successful and run.has_converged)]
             self.N_nonSuc = len(non_successful_convergent_runs)
@@ -185,22 +185,20 @@ class ExperimentStats:
             self.Sigma_NI = np.std(NIs)
     
     def __calculate_loss_stats(self, runs: list[RunStats]):
-        NI_lose_list = [run.NI_lose for run in runs if run.NI_lose is not None]
+        NI_lose_list = [run.NI_lose for run in runs if run.Num_lose > 0]
         self.NI_with_Lose = len(NI_lose_list)
         if NI_lose_list:
             self.Avg_NI_lose = np.mean(NI_lose_list)
             self.Sigma_NI_lose = np.std(NI_lose_list)
-        Num_lose_list = [run.Num_lose for run in runs]
+        Num_lose_list = [run.Num_lose for run in runs if run.Num_lose > 0]
         if Num_lose_list:
             self.Avg_Num_lose = np.mean(Num_lose_list)
             self.Sigma_Num_lose = np.std(Num_lose_list)
-        optSaved_NI_lose_list = [run.optSaved_NI_lose for run in runs \
-                                 if run.optSaved_NI_lose is not None]
+        optSaved_NI_lose_list = [run.optSaved_NI_lose for run in runs if run.Num_lose > 0]
         if optSaved_NI_lose_list:
             self.Avg_optSaved_NI_lose = np.mean(optSaved_NI_lose_list)
             self.Sigma_optSaved_NI_lose = np.std(optSaved_NI_lose_list)
-        MaxOptSaved_NI_lose_list = [run.MaxOptSaved_NI_lose for run in runs \
-                                 if run.MaxOptSaved_NI_lose is not None]
+        MaxOptSaved_NI_lose_list = [run.MaxOptSaved_NI_lose for run in runs if run.Num_lose > 0]
         if MaxOptSaved_NI_lose_list:
             self.Avg_MaxOptSaved_NI_lose = np.mean(MaxOptSaved_NI_lose_list)
             self.Sigma_MaxOptSaved_NI_lose = np.std(MaxOptSaved_NI_lose_list)

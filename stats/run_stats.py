@@ -12,7 +12,7 @@ class RunStats:
         self.has_converged = False
 
         # Loss of Optimal Chromosome
-        self.NI_lose = None
+        self.NI_lose = 0
         self.Num_lose = 0
         self.optSaved_NI_lose = None
         self.MaxOptSaved_NI_lose = None
@@ -86,16 +86,6 @@ class RunStats:
         self.Kend_avg = None
 
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
-        # Loss of Optimal Chromosome
-        if gen_stats.lose_optimal:
-            self.NI_lose = gen_i
-            self.Num_lose += 1
-            self.optSaved_NI_lose = gen_stats.prev_optimal_count
-            if self.MaxOptSaved_NI_lose is None:
-                self.MaxOptSaved_NI_lose = self.optSaved_NI_lose
-            else:
-                self.MaxOptSaved_NI_lose = max(self.MaxOptSaved_NI_lose, self.optSaved_NI_lose)
-
         # Reproduction Rate
         if self.RR_start is None:
             self.RR_start = gen_stats.reproduction_rate
@@ -132,6 +122,16 @@ class RunStats:
         self.unique_X_fin = gen_stats.n_unique
 
         if self.param_names[0] != 'FconstALL':
+            # Loss of Optimal Chromosome
+            if gen_stats.lose_optimal:
+                self.NI_lose = gen_i
+                self.Num_lose += 1
+                self.optSaved_NI_lose = gen_stats.prev_optimal_count
+                if self.MaxOptSaved_NI_lose is None:
+                    self.MaxOptSaved_NI_lose = self.optSaved_NI_lose
+                else:
+                    self.MaxOptSaved_NI_lose = max(self.MaxOptSaved_NI_lose, self.optSaved_NI_lose)
+
             # Selection Intensity
             if self.I_start is None:
                 self.I_start = gen_stats.intensity
