@@ -90,7 +90,10 @@ class EvoAlgorithm:
     def __calculate_final_stats(self, run_i):
         if run_i < RUNS_TO_PLOT and (self.gen_i < DISTRIBUTIONS_TO_PLOT or self.gen_i % DISTRIBUTION_RATE_TO_PLOT == 0):
             plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
+            
         if run_i < RUNS_TO_PLOT:
+            excel.write_population_stats(self.population, self.param_names, run_i, 
+                                                 self.gen_i)
             for key in [70, 80, 90, 95, 99]:
                 if self.plot_thresholds[str(key)]:
                     continue

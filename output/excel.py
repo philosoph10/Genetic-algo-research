@@ -156,7 +156,7 @@ def write_generation_stats(generation_stats_list, param_names, run_i):
     
     workbook.close()
 
-def write_population_stats(population: Population, param_names, run_i, gen_i, homogeneous_frac):
+def write_population_stats(population: Population, param_names, run_i, gen_i, homogeneous_frac=None):
     """
     Write statistics of a population related to plots to excel
     :param population: the population to record
@@ -167,9 +167,11 @@ def write_population_stats(population: Population, param_names, run_i, gen_i, ho
     """
     path = __get_path_hierarchy(param_names, run_i)
     path = os.path.join(*path)
-    path = os.path.join(path, 'homogeneous')
+    if homogeneous_frac is not None:
+        path = os.path.join(path, 'homogeneous')
     os.makedirs(path, exist_ok=True)
-    filename = f'{int(homogeneous_frac*100)}_{gen_i}.xlsx'
+    x = 'Final' if homogeneous_frac is None else int(homogeneous_frac*100)
+    filename = f'{x}_{gen_i}.xlsx'
 
     workbook = xlsxwriter.Workbook(os.path.join(path, filename))
     worksheet = workbook.add_worksheet()
