@@ -39,6 +39,10 @@ EXP_STATS_NAMES = [
 
     'nonSuc', 'nonMin_NI', 'nonMax_NI', 'nonAvg_NI', 'nonSigma_NI',
     'nonAvg_F_found', 'nonSigma_F_found', 'nonMax_F_found',
+
+    'NI_with_Lose', 'Avg_NI_lose', 'Sigma_NI_lose',
+    'Avg_Num_lose', 'Sigma_Num_lose', 'Avg_optSaved_NI_lose',
+    'Sigma_optSaved_NI_lose', 'Avg_MaxOptSaved_NI_lose', 'Sigma_MaxOptSaved_NI_lose',
     
     'Min_RR_min', 'NI_RR_min', 'Max_RR_max', 'NI_RR_max',
     'Avg_RR_min', 'Avg_RR_max', 'Avg_RR_avg',

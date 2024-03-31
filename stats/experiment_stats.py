@@ -24,6 +24,17 @@ class ExperimentStats:
         self.nonSigma_F_found = None
         self.nonMax_F_found = None
 
+        # Loss of Optimal Chromosome
+        self.NI_with_Lose = None
+        self.Avg_NI_lose = None
+        self.Sigma_NI_lose = None
+        self.Avg_Num_lose = None
+        self.Sigma_Num_lose = None
+        self.Avg_optSaved_NI_lose = None
+        self.Sigma_optSaved_NI_lose = None
+        self.Avg_MaxOptSaved_NI_lose = None
+        self.Sigma_MaxOptSaved_NI_lose = None
+
         # Reproduction Rate
         self.Min_RR_min = None
         self.NI_RR_min = None
@@ -140,6 +151,8 @@ class ExperimentStats:
         self.runs[run_i] = run
 
     def calculate(self):
+        self.__calculate_loss_stats(self.runs)
+        
         successful_runs = [run for run in self.runs if run.is_successful]
         self.N_Suc = len(successful_runs)
         self.Suc = self.N_Suc / NR
@@ -170,6 +183,27 @@ class ExperimentStats:
             self.Max_NI = max(NIs)
             self.Avg_NI = np.mean(NIs)
             self.Sigma_NI = np.std(NIs)
+    
+    def __calculate_loss_stats(self, runs: list[RunStats]):
+        NI_lose_list = [run.NI_lose for run in runs if run.NI_lose is not None]
+        self.NI_with_Lose = len(NI_lose_list)
+        if NI_lose_list:
+            self.Avg_NI_lose = np.mean(NI_lose_list)
+            self.Sigma_NI_lose = np.std(NI_lose_list)
+        Num_lose_list = [run.Num_lose for run in runs]
+        if Num_lose_list:
+            self.Avg_Num_lose = np.mean(Num_lose_list)
+            self.Sigma_Num_lose = np.std(Num_lose_list)
+        optSaved_NI_lose_list = [run.optSaved_NI_lose for run in runs \
+                                 if run.optSaved_NI_lose is not None]
+        if optSaved_NI_lose_list:
+            self.Avg_optSaved_NI_lose = np.mean(optSaved_NI_lose_list)
+            self.Sigma_optSaved_NI_lose = np.std(optSaved_NI_lose_list)
+        MaxOptSaved_NI_lose_list = [run.MaxOptSaved_NI_lose for run in runs \
+                                 if run.MaxOptSaved_NI_lose is not None]
+        if MaxOptSaved_NI_lose_list:
+            self.Avg_MaxOptSaved_NI_lose = np.mean(MaxOptSaved_NI_lose_list)
+            self.Sigma_MaxOptSaved_NI_lose = np.std(MaxOptSaved_NI_lose_list)
 
     def __calculate_rr_stats(self, runs: list[RunStats]):
         RR_min_list = [run.RR_min for run in runs]
