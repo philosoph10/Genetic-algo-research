@@ -25,10 +25,14 @@ class EvoAlgorithm:
         self.prev_gen_stats = None
         self.gen_stats_list = None
         self.has_converged = False
+        self.plot_thresholds = None
         
     def run(self, run_i):
         if run_i < RUNS_TO_PLOT:
             self.gen_stats_list = []
+            self.plot_thresholds = {}
+            for key in [70, 80, 90, 95, 99]:
+                self.plot_thresholds[str(key)] = False
 
         f_avgs = []
         while not self.has_converged and self.gen_i < G:
@@ -60,7 +64,15 @@ class EvoAlgorithm:
             plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
         # if run_i < RUNS_TO_PLOT and self.population.is_homogeneous_frac(0.9):
         #     plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i, homogeneous_frac=0.9)
-        
+        if run_i < RUNS_TO_PLOT:
+            for key in [70, 80, 90, 95, 99]:
+                if self.plot_thresholds[str(key)]:
+                    continue
+                if self.population.is_homogeneous_frac(key/100.):
+                    self.plot_thresholds[str(key)] = True
+                    plotting.plot_generation_stats(self.population, self.param_names, run_i, 
+                                                   self.gen_i, homogeneous_frac=key/100.)
+
         gen_stats = GenerationStats(self.population, self.param_names)
         if run_i < RUNS_TO_PLOT:
             self.gen_stats_list.append(gen_stats)
@@ -76,6 +88,14 @@ class EvoAlgorithm:
     def __calculate_final_stats(self, run_i):
         if run_i < RUNS_TO_PLOT and (self.gen_i < DISTRIBUTIONS_TO_PLOT or self.gen_i % DISTRIBUTION_RATE_TO_PLOT == 0):
             plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
+        if run_i < RUNS_TO_PLOT:
+            for key in [70, 80, 90, 95, 99]:
+                if self.plot_thresholds[str(key)]:
+                    continue
+                if self.population.is_homogeneous_frac(key/100.):
+                    self.plot_thresholds[str(key)] = True
+                    plotting.plot_generation_stats(self.population, self.param_names, run_i, 
+                                                   self.gen_i, homogeneous_frac=key/100.)
 
         gen_stats = GenerationStats(self.population, self.param_names)
         if run_i < RUNS_TO_PLOT:

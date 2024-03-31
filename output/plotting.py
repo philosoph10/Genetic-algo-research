@@ -113,7 +113,7 @@ def __plot_fitness_distribution(
     path = '/'.join(param_hierarchy)
 
     if homogeneous_frac is not None:
-        path = os.path.join(path, f'homogeneous_{int(homogeneous_frac*100)}')
+        path = os.path.join(path, 'homogeneous')
 
     if not os.path.exists(path):
         os.makedirs(path)
@@ -124,7 +124,9 @@ def __plot_fitness_distribution(
     plt.bar(x, y, width=x_step*0.8)
     plt.xlabel('Chromosome fitness')
     plt.ylabel('Number of chromosomes')
-    plt.savefig(f'{path}/{gen_i}.png')
+    save_file = f'{path}/{int(homogeneous_frac*100)}_{gen_i}.png' if homogeneous_frac is not None\
+                else f'{path}/{gen_i}.png'
+    plt.savefig(save_file)
     plt.close()
 
 def __plot_phenotype_distribution(
@@ -136,7 +138,7 @@ def __plot_phenotype_distribution(
     path = '/'.join(param_hierarchy)
 
     if homogeneous_frac is not None:
-        path = os.path.join(path, f'homogeneous_{int(homogeneous_frac*100)}')
+        path = os.path.join(path, 'homogeneous')
 
     if not os.path.exists(path):
         os.makedirs(path)
@@ -150,7 +152,9 @@ def __plot_phenotype_distribution(
     plt.bar(x, y, width=x_step*0.8)
     plt.xlabel('Chromosome phenotype')
     plt.ylabel('Number of chromosomes')
-    plt.savefig(f'{path}/{gen_i}.png')
+    save_file = f'{path}/{int(homogeneous_frac*100)}_{gen_i}.png' if homogeneous_frac is not None\
+                else f'{path}/{gen_i}.png'
+    plt.savefig(save_file)
     plt.close()
 
 def __plot_genotype_distribution(
@@ -160,7 +164,7 @@ def __plot_genotype_distribution(
     param_hierarchy = __get_path_hierarchy(param_names, run_i) + ['genotype']
     path = '/'.join(param_hierarchy)
     if homogeneous_frac is not None:
-        path = os.path.join(path, f'homogeneous_{int(homogeneous_frac*100)}')
+        path = os.path.join(path, 'homogeneous')
 
     if not os.path.exists(path):
         os.makedirs(path)
@@ -170,7 +174,9 @@ def __plot_genotype_distribution(
     plt.bar(x, y)
     plt.xlabel('Number of 1s in genotype')
     plt.ylabel('Number of chromosomes')
-    plt.savefig(f'{path}/{gen_i}.png')
+    save_file = f'{path}/{int(homogeneous_frac*100)}_{gen_i}.png' if homogeneous_frac is not None\
+                else f'{path}/{gen_i}.png'
+    plt.savefig(save_file)
     plt.close()
 
 def __get_distribution(data, x_min=0, x_max=None, x_step=1):
