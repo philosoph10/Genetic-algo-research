@@ -5,6 +5,10 @@ from scipy.stats import fisher_exact, kendalltau
 
 # stats that are used for graphs
 class GenerationStats:
+
+    # static attributes
+    num_optimal = None
+
     def __init__(self, population: Population, param_names: tuple[str]):
         self.population = population
         self.param_names = param_names
@@ -14,12 +18,15 @@ class GenerationStats:
         self.f_best = None
         self.num_of_best = None
         self.optimal_count = None
+        # optimal count on previous generation, None for the 1st generation
+        self.prev_optimal_count = None
         self.growth_rate = None
         self.difference = None
         self.intensity = None
         self.reproduction_rate = None
         self.loss_of_diversity = None
         self.n_unique = None
+        self.lose_optimal = False
 
         # Selection pressure
         self.pr = None
@@ -38,7 +45,13 @@ class GenerationStats:
             self.f_std = self.population.get_fitness_std()
             self.f_best = self.population.get_fitness_max()
             self.num_of_best = self.population.count_fitness_at_least(self.f_best)
+
+            self.prev_optimal_count = GenerationStats.num_optimal
             self.optimal_count = self.population.count_optimal_genotype()
+            if GenerationStats.num_optimal is not None and GenerationStats.num_optimal > 0 and self.optimal_count == 0:
+                    self.lose_optimal = True
+            GenerationStats.num_optimal = self.optimal_count
+
             self.pr = self.f_best / self.f_avg
             
             if not prev_gen_stats:

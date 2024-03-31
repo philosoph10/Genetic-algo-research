@@ -1,11 +1,11 @@
 # environment parameters
-env = 'prod'
+env = 'test'
 THREADS = 16
 
 # run parameters
-N = 20 if env == 'test' else 100
-G = 2500 if env == 'test' else 10000
-NR = 10 if env == 'test' else 100
+N = 20 if env == 'test' else 50
+G = 2500 if env == 'test' else 2500
+NR = 10 if env == 'test' else 50
 
 # convergence parameters
 EPS = 0.0001
@@ -18,11 +18,12 @@ get_pop_seed = lambda run_i: 1381*run_i + 5912826
 
 # output parameters
 DISTRIBUTIONS_TO_PLOT = 5
-DISTRIBUTION_RATE_TO_PLOT = 10 if env == 'test' else 1000
-RUNS_TO_PLOT = 5
-OUTPUT_FOLDER = 'out_test_debug' if env == 'test' else 'out'
+DISTRIBUTION_RATE_TO_PLOT = 500 if env == 'test' else 500
+RUNS_TO_PLOT = 3
+OUTPUT_FOLDER = 'out_small' if env == 'test' else 'out'
 RUN_STATS_NAMES = [
     'NI', 'F_found', 'F_avg',
+    'NI_lose', 'Num_lose', 'optSaved_NI_lose', 'MaxOptSaved_NI_lose',
     'RR_start', 'RR_fin', 'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg',
     'Teta_start', 'Teta_fin', 'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg',
     'unique_X_start', 'unique_X_fin',
