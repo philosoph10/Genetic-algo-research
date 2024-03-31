@@ -3,6 +3,8 @@ import xlsxwriter
 import os
 from stats.experiment_stats import ExperimentStats
 import numpy as np
+from model.population import Population
+import builtins
 
 def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
     ff_name = experiment_stats_list[0].params[0]
@@ -152,6 +154,54 @@ def write_generation_stats(generation_stats_list, param_names, run_i):
                 __write_value_with_nan_inf_handling(worksheet, row, col, value)
                 worksheet.write(row, col + 1, getattr(gen_stats, FCONSTALL_GEN_STATS_NAMES[col]))
     
+    workbook.close()
+
+def write_population_stats(population: Population, param_names, run_i, gen_i, homogeneous_frac):
+    """
+    Write statistics of a population related to plots to excel
+    :param population: the population to record
+    :param param_names: list of parameters, defining the path
+    :param run_i: number of the run of the GA
+    :param gen_i: number of the generation
+    :param homogeneous_frac: the fraction of homogeneous chromosomes
+    """
+    path = __get_path_hierarchy(param_names, run_i)
+    path = os.path.join(*path)
+    path = os.path.join(path, 'homogeneous')
+    os.makedirs(path, exist_ok=True)
+    filename = f'{int(homogeneous_frac*100)}_{gen_i}.xlsx'
+
+    workbook = xlsxwriter.Workbook(os.path.join(path, filename))
+    worksheet = workbook.add_worksheet()
+    worksheet.name = f'Population: {gen_i}'
+    # worksheet.freeze_panes(1, 1)
+
+    worksheet.write(0, 0, 'Genotype')
+    worksheet.write(0, 1, 'Phenotype')
+    worksheet.write(0, 2, 'Fitness')
+    worksheet.write(0, 3, '#individuals')
+
+    def hash_numpy(geno):
+        hash = ''.join(str(b.decode('utf-8')) for b in geno)
+        return hash
+    
+    genotypes = {}
+    for chrom in population.chromosomes:
+        geno = hash_numpy(chrom.genotype)
+        if geno in genotypes:
+            genotypes[geno][2] += 1
+        else:
+            genotypes[geno] = [population.fitness_function.get_phenotype(chrom.genotype), chrom.fitness, 1]
+        
+    genotypes = dict(sorted(genotypes.items(), key=lambda x: x[1][2], reverse=True))
+
+    for i, geno in enumerate(genotypes.keys()):
+        row = i + 1
+        worksheet.write(row, 0, geno)
+        worksheet.write(row, 1, genotypes[geno][0])
+        worksheet.write(row, 2, genotypes[geno][1])
+        worksheet.write(row, 3, genotypes[geno][2])
+
     workbook.close()
 
 def __get_path_hierarchy(param_names, run_i):

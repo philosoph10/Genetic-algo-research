@@ -12,7 +12,7 @@ def plot_run_stats(
         run_i):
     reproduction_rates = [gen_stats.reproduction_rate for gen_stats in gen_stats_list if gen_stats.reproduction_rate is not None]
     losses_of_diversity = [gen_stats.loss_of_diversity for gen_stats in gen_stats_list if gen_stats.loss_of_diversity is not None]
-    __plot_stat2(reproduction_rates, losses_of_diversity, param_names, run_i, 'Reproduction Rate', 'Loss of Diversity', 'rr_and_lod')
+    __plot_stat2(reproduction_rates, losses_of_diversity, param_names, run_i, 'Reproduction Rate', 'Loss of Diversity', 'rr_and_lod', y_lim=(0,1))
 
     if param_names[0] != 'FconstALL':
         f_avgs = [gen_stats.f_avg for gen_stats in gen_stats_list]
@@ -41,16 +41,16 @@ def plot_run_stats(
         __plot_stat(growth_rates, param_names, run_i, 'Growth Rate', 'growth_rate')
 
         pr_fets = [gen_stats.P_FET for gen_stats in gen_stats_list]
-        __plot_stat(pr_fets, param_names, run_i, 'Fisher Exact Pressure', 'fisher_exact')
+        __plot_stat(pr_fets, param_names, run_i, 'Fisher Exact Pressure', 'fisher_exact', y_lim=(0,1))
 
         pressures = [gen_stats.pr for gen_stats in gen_stats_list]
         __plot_stat(pressures, param_names, run_i, 'Selection Pressure', 'selection_pressure')
 
         kendall_taus = [gen_stats.Kendall_tau for gen_stats in gen_stats_list]
-        __plot_stat(kendall_taus, param_names, run_i, 'Kendall Tau-b Pressure Test', 'kendall_tau')
+        __plot_stat(kendall_taus, param_names, run_i, 'Kendall Tau-b Pressure Test', 'kendall_tau', y_lim=(-1,1))
 
         fraction_of_best = [gen_stats.num_of_best / N for gen_stats in gen_stats_list]
-        __plot_stat(fraction_of_best, param_names, run_i, 'Fraction of best individual accross generation', 'fraction_of_best')
+        __plot_stat(fraction_of_best, param_names, run_i, 'Fraction of best individual accross generation', 'fraction_of_best', y_lim=(0,1))
 
         ns_unique = [gen_stats.n_unique for gen_stats in gen_stats_list]
         __plot_stat(ns_unique, param_names, run_i, '#unique chromosomes', 'n_unique')
@@ -72,7 +72,8 @@ def __plot_stat(
         param_names: tuple[str],
         run_i,
         ylabel,
-        file_name):
+        file_name,
+        y_lim=None):
     param_hierarchy = __get_path_hierarchy(param_names, run_i)
     path = '/'.join(param_hierarchy)
 
@@ -82,6 +83,8 @@ def __plot_stat(
     plt.plot(data)
     plt.ylabel(ylabel)
     plt.xlabel('Generation')
+    if y_lim is not None:
+        plt.ylim(*y_lim)
     plt.savefig(f'{path}/{file_name}.png')
     plt.close()
 
@@ -90,7 +93,8 @@ def __plot_stat2(
         param_names: tuple[str],
         run_i,
         label1, label2,
-        file_name):
+        file_name,
+        y_lim=None):
     param_hierarchy = __get_path_hierarchy(param_names, run_i)
     path = '/'.join(param_hierarchy)
 
@@ -99,6 +103,9 @@ def __plot_stat2(
 
     plt.plot(data1, label=label1)
     plt.plot(data2, label=label2)
+
+    if y_lim is not None:
+        plt.ylim(*y_lim)
 
     plt.xlabel('Generation')
     plt.legend()

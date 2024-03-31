@@ -72,6 +72,8 @@ class EvoAlgorithm:
                     self.plot_thresholds[str(key)] = True
                     plotting.plot_generation_stats(self.population, self.param_names, run_i, 
                                                    self.gen_i, homogeneous_frac=key/100.)
+                    excel.write_population_stats(self.population, self.param_names, run_i, 
+                                                 self.gen_i, key/100.)
 
         gen_stats = GenerationStats(self.population, self.param_names)
         if run_i < RUNS_TO_PLOT:
@@ -96,6 +98,8 @@ class EvoAlgorithm:
                     self.plot_thresholds[str(key)] = True
                     plotting.plot_generation_stats(self.population, self.param_names, run_i, 
                                                    self.gen_i, homogeneous_frac=key/100.)
+                    excel.write_population_stats(self.population, self.param_names, run_i, 
+                                                 self.gen_i, key/100.)
 
         gen_stats = GenerationStats(self.population, self.param_names)
         if run_i < RUNS_TO_PLOT:
