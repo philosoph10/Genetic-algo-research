@@ -21,7 +21,9 @@ class Population:
                     self.chromosomes[chr_i] = Chromosome(chr_i, optimal_genotype, fitness_function)
             rng = np.random.default_rng(seed=seed)
             for chr_i in range(optimals, N):
-                genotype = rng.choice([b'0', b'1'], fitness_function.chr_length)
+                genotype = optimal_genotype = fitness_function.get_optimal().genotype
+                while np.all(genotype == optimal_genotype):
+                    genotype = rng.choice([b'0', b'1'], fitness_function.chr_length)
                 self.chromosomes[chr_i] = Chromosome(chr_i, genotype, fitness_function)
 
             random.shuffle(self.chromosomes)
