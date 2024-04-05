@@ -116,8 +116,12 @@ class EvoAlgorithm:
 
     def __check_success(self, gen_stats: GenerationStats):
         if self.param_names[0] == 'FconstALL':
-            return self.has_converged
-        elif self.param_names[0] == 'FHD':
+            if self.param_names[2] == 'no_operators':
+                return self.population.is_homogenous_100()
+            return self.has_converged and self.population.is_homogeneous_frac(90)
+        if self.param_names[0] == 'FHD' or self.param_names[0] == 'FH':
+            if self.param_names[2] == 'no_operators':
+                return self.has_converged and gen_stats.optimal_count == N
             return self.has_converged and gen_stats.optimal_count >= N * 0.9
         else:
             return self.has_converged and self.population.found_close_to_optimal()
