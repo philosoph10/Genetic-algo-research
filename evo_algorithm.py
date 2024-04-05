@@ -42,7 +42,7 @@ class EvoAlgorithm:
             if len(f_avgs) > N_LAST_GENS:
                 f_avgs.pop(0)
 
-            self.has_converged = self.population.has_converged(f_avgs, self.param_names)
+            self.has_converged = self.population.has_converged(self.param_names)
             self.prev_gen_stats = gen_stats
             self.gen_i += 1
 

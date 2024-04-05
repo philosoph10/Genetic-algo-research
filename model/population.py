@@ -28,16 +28,13 @@ class Population:
         
         self.update()
 
-    def has_converged(self, f_avgs, param_names):
-        has_mutation = 'mut' in param_names[2]
+    def has_converged(self, param_names):
+        has_gen_op = param_names[2] != 'no_operators'
 
-        if not has_mutation:
+        if not has_gen_op:
             return self.is_homogenous_100()
             
-        if param_names[0] == 'FconstALL':
-            return self.is_homogenous_99()
-
-        return self.has_f_avg_converged(f_avgs)
+        return self.is_homogenous_99()
     
     def has_f_avg_converged(self, f_avgs):
         if len(f_avgs) < N_LAST_GENS:
@@ -113,7 +110,6 @@ class Population:
         '''
         unique_genotypes = set(tuple(genotype) for genotype in self.genotypes)
         return len(unique_genotypes)
-
 
     def update(self):
         self.fitnesses = np.array([chr.fitness for chr in self.chromosomes])
