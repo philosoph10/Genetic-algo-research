@@ -62,31 +62,31 @@ class GenerationStats:
 
     def calculate_stats_after_selection(self):
         ids_after_selection = set(self.population.get_ids())
-        
-        # Compute Fisher exact test
-        fitnesses = list(self.init_fitnesses)
-        offspring_counts = []
-        is_constant = True
-        for id in range(N):
-            cnt = 0
-            for chr in self.population.chromosomes:
-                if chr.id == id:
-                    cnt += 1
-            if cnt != 1:
-                is_constant = False
-            offspring_counts.append(cnt)
-        self.P_FET = self.fisher_exact_test(offspring_counts, fitnesses)
-        # it is important to check for constant because Kendall tau returns nan
-        if is_constant:
-            self.Kendall_tau = 0
-        else:
-            self.Kendall_tau = kendalltau(np.array(fitnesses), np.array(offspring_counts)).statistic
 
         self.reproduction_rate = len(ids_after_selection) / N
         self.loss_of_diversity = len([True for id in self.ids_before_selection if id not in ids_after_selection]) / N
         self.ids_before_selection = None
 
         if self.param_names[0] != 'FconstALL':
+            # Compute Fisher exact test
+            fitnesses = list(self.init_fitnesses)
+            offspring_counts = []
+            is_constant = True
+            for id in range(N):
+                cnt = 0
+                for chr in self.population.chromosomes:
+                    if chr.id == id:
+                        cnt += 1
+                if cnt != 1:
+                    is_constant = False
+                offspring_counts.append(cnt)
+            self.P_FET = self.fisher_exact_test(offspring_counts, fitnesses)
+            # it is important to check for constant because Kendall tau returns nan
+            if is_constant:
+                self.Kendall_tau = 0
+            else:
+                self.Kendall_tau = kendalltau(np.array(fitnesses), np.array(offspring_counts)).statistic
+
             self.difference = self.population.get_fitness_avg() - self.f_avg
 
             if self.f_std == 0:
