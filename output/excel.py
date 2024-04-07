@@ -4,7 +4,7 @@ import os
 from stats.experiment_stats import ExperimentStats
 import numpy as np
 from model.population import Population
-import builtins
+from model.fitness_functions import Deb2, Deb4
 
 def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
     ff_name = experiment_stats_list[0].params[0]
@@ -176,7 +176,9 @@ def write_population_stats(population: Population, param_names, run_i, gen_i, ho
     workbook = xlsxwriter.Workbook(os.path.join(path, filename))
     worksheet = workbook.add_worksheet()
     worksheet.name = f'Population: {gen_i}'
-    # worksheet.freeze_panes(1, 1)
+    
+    three_digit_format = workbook.add_format({'num_format': '0.000'})
+    two_digit_format = workbook.add_format({'num_format': '0.00'})
 
     worksheet.write(0, 0, 'Genotype')
     worksheet.write(0, 1, 'Phenotype')
@@ -199,10 +201,18 @@ def write_population_stats(population: Population, param_names, run_i, gen_i, ho
 
     for i, geno in enumerate(genotypes.keys()):
         row = i + 1
-        worksheet.write(row, 0, geno)
-        worksheet.write(row, 1, genotypes[geno][0])
-        worksheet.write(row, 2, genotypes[geno][1])
-        worksheet.write(row, 3, genotypes[geno][2])
+        # worksheet.write(row, 0, geno)
+        # worksheet.write(row, 1, genotypes[geno][0])
+        # worksheet.write(row, 2, genotypes[geno][1])
+        # worksheet.write(row, 3, genotypes[geno][2])
+        if isinstance(population.fitness_function, Deb2) or isinstance(population.fitness_function, Deb4):
+            decimal_format = three_digit_format
+        else:
+            decimal_format = two_digit_format
+        __write_float_with_fixed_precision(worksheet, row, 0, geno, decimal_format)
+        __write_float_with_fixed_precision(worksheet, row, 1, genotypes[geno][0], decimal_format)
+        __write_float_with_fixed_precision(worksheet, row, 2, genotypes[geno][1], decimal_format)
+        __write_float_with_fixed_precision(worksheet, row, 3, genotypes[geno][2], decimal_format)
 
     workbook.close()
 
@@ -229,3 +239,9 @@ def __write_value_with_nan_inf_handling(worksheet, row, col, value):
     else:
         # Otherwise, write the actual value
         worksheet.write(row, col + 1, value)
+
+def __write_float_with_fixed_precision(worksheet, row, col, value, format):
+    if not isinstance(value, float):
+        worksheet.write(row, col, value)
+    else:
+        worksheet.write(row, col, value, format)

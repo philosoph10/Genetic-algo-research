@@ -136,9 +136,10 @@ class ScaledSUS(SelectionMethod):
         bias = self.b(population.fitnesses)
 
         scaled_fitnesses = np.array([self.a*chr.fitness + bias for chr in population.chromosomes])
-        min_fitness = np.min(scaled_fitnesses)
-        if min_fitness < 0:
-            scaled_fitnesses -= min_fitness
+        
+        scaled_fitnesses = np.array([np.maximum(0, fitness) for fitness in scaled_fitnesses])
+        if np.all(scaled_fitnesses == 0):
+            scaled_fitnesses = 0*scaled_fitnesses + 0.0001
 
         for index, chromosome in enumerate(population.chromosomes):
             scaled_fitness = scaled_fitnesses[index]

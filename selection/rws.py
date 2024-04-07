@@ -91,9 +91,11 @@ class ScaledRWS(SelectionMethod):
     def select(self, population: Population):
         bias = self.b(population.fitnesses)
         fitness_list = [self.a*fitness + bias for fitness in population.fitnesses]
-        min_fitness = np.min(fitness_list)
-        if min_fitness < 0:
-            fitness_list = [fitness - min_fitness for fitness in fitness_list]
+        
+        fitness_list = [np.maximum(0, fitness) for fitness in fitness_list]
+        if np.all(np.array(fitness_list) == 0):
+            fitness_list = [0.0001 for _ in fitness_list]
+        
         fitness_sum = sum(fitness_list)
 
         if fitness_sum == 0:

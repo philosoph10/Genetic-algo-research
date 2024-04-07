@@ -73,7 +73,7 @@ class FloatEncoder(Encoder):
     
     def decode(self, encoded):
         n = self.sub_encoder.decode(encoded)
-        decoded = round(self.lower_bound + n * self.__decoding_multiplier, 2)
+        decoded = self.lower_bound + n * self.__decoding_multiplier
         return decoded
     
     def get_all_values(self):
