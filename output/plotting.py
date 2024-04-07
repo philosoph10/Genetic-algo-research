@@ -41,16 +41,16 @@ def plot_run_stats(
         __plot_stat(growth_rates, param_names, run_i, 'Growth Rate', 'growth_rate')
 
         pr_fets = [gen_stats.P_FET for gen_stats in gen_stats_list]
-        __plot_stat(pr_fets, param_names, run_i, 'Fisher Exact Pressure', 'fisher_exact', y_lim=(0,1))
+        __plot_stat(pr_fets, param_names, run_i, 'Fisher Exact Pressure', 'fisher_exact', y_lim=None)
 
         pressures = [gen_stats.pr for gen_stats in gen_stats_list]
         __plot_stat(pressures, param_names, run_i, 'Selection Pressure', 'selection_pressure')
 
         kendall_taus = [gen_stats.Kendall_tau for gen_stats in gen_stats_list]
-        __plot_stat(kendall_taus, param_names, run_i, 'Kendall Tau-b Pressure Test', 'kendall_tau', y_lim=(-1,1))
+        __plot_stat(kendall_taus, param_names, run_i, 'Kendall Tau-b Pressure Test', 'kendall_tau', y_lim=(-1.01,1.01))
 
         fraction_of_best = [gen_stats.num_of_best / N for gen_stats in gen_stats_list]
-        __plot_stat(fraction_of_best, param_names, run_i, 'Fraction of best individual accross generation', 'fraction_of_best', y_lim=(0,1))
+        __plot_stat(fraction_of_best, param_names, run_i, 'Fraction of best individual accross generation', 'fraction_of_best', y_lim=(-0.01,1.01))
 
         ns_unique = [gen_stats.n_unique for gen_stats in gen_stats_list]
         __plot_stat(ns_unique, param_names, run_i, '#unique chromosomes', 'n_unique')

@@ -114,5 +114,14 @@ class GenerationStats:
 
         contingency_table = np.array([[A, B], [C, D]])
 
-        _, pvalue = fisher_exact(contingency_table)
-        return pvalue
+        _, pvalue = fisher_exact(contingency_table, alternative='greater')
+        return -np.log10(pvalue)
+    
+if __name__ == '__main__':
+    offspring_counts = [0, 0, 1, 0, 2, 1, 0, 2, 2, 2]
+    fitnesses = [0, 1, 1, 2, 3, 4, 5, 5, 7, 9]
+
+    print(f'Traits = {fitnesses}')
+    print(f'Offspring = {offspring_counts}')
+    print(f'Fisher exact test = {round(GenerationStats.fisher_exact_test(offspring_counts, fitnesses),2)}')
+    print(f'Kendall tau-b = {round(kendalltau(np.array(fitnesses), np.array(offspring_counts)).statistic,2)}')
