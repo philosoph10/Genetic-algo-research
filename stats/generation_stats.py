@@ -79,8 +79,8 @@ class GenerationStats:
         self.ids_before_selection = None
 
         if self.param_names[0] != 'FconstALL':
-            self.f_avg = self.population.get_fitness_avg()
-            self.f_best = self.population.get_fitness_max()
+            # self.f_avg = self.population.get_fitness_avg()
+            # self.f_best = self.population.get_fitness_max()
             # self.pr = self.f_best / self.f_avg
 
             # Compute Fisher exact test

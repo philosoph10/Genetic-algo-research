@@ -83,6 +83,8 @@ def __plot_stat(
     plt.plot(data)
     plt.ylabel(ylabel)
     plt.xlabel('Generation')
+    x_size = len(data) if data[-1] is not None else len(data) - 1
+    plt.xticks(range(x_size))
     if y_lim is not None:
         plt.ylim(*y_lim)
     plt.savefig(f'{path}/{file_name}.png')
