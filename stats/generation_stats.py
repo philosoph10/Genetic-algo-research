@@ -2,6 +2,9 @@ from config import N
 from model.population import Population
 import numpy as np
 from scipy.stats import fisher_exact, kendalltau
+from selection.selection_method import SelectionMethod
+from selection.rws import ScaledRWS
+from selection.sus import ScaledSUS
 
 # stats that are used for graphs
 class GenerationStats:
@@ -9,7 +12,7 @@ class GenerationStats:
     # static attributes
     num_optimal = None
 
-    def __init__(self, population: Population, param_names: tuple[str]):
+    def __init__(self, population: Population, param_names: tuple[str], selection_method: SelectionMethod):
         self.population = population
         self.param_names = param_names
 
@@ -35,6 +38,7 @@ class GenerationStats:
         # Kendall's tau-b test for selection pressure
         self.Kendall_tau = None
         self.init_fitnesses = population.fitnesses
+        self.sm = selection_method
 
     def calculate_stats_before_selection(self, prev_gen_stats):
         self.ids_before_selection = set(self.population.get_ids())
@@ -52,7 +56,14 @@ class GenerationStats:
                     self.lose_optimal = True
             GenerationStats.num_optimal = self.optimal_count
 
-            self.pr = self.f_best / self.f_avg
+            if isinstance(self.sm, ScaledRWS) or isinstance(self.sm, ScaledSUS):
+                bias = self.sm.b(self.population.fitnesses)
+                scaled_fitnesses = np.array([max(self.sm.a*fitness + bias, 0) for fitness in self.population.fitnesses], dtype=np.float64)
+                if np.all(scaled_fitnesses == 0):
+                    scaled_fitnesses += 0.0001
+                self.pr = np.max(scaled_fitnesses) / np.mean(scaled_fitnesses)
+            else:
+                self.pr = self.f_best / self.f_avg
             
             if not prev_gen_stats:
                 self.growth_rate = 1
@@ -68,6 +79,10 @@ class GenerationStats:
         self.ids_before_selection = None
 
         if self.param_names[0] != 'FconstALL':
+            self.f_avg = self.population.get_fitness_avg()
+            self.f_best = self.population.get_fitness_max()
+            # self.pr = self.f_best / self.f_avg
+
             # Compute Fisher exact test
             fitnesses = list(self.init_fitnesses)
             offspring_counts = []

@@ -75,7 +75,7 @@ class EvoAlgorithm:
                     excel.write_population_stats(self.population, self.param_names, run_i, 
                                                  self.gen_i, key/100.)
 
-        gen_stats = GenerationStats(self.population, self.param_names)
+        gen_stats = GenerationStats(self.population, self.param_names, self.selection_method)
         if run_i < RUNS_TO_PLOT:
             self.gen_stats_list.append(gen_stats)
 
@@ -104,7 +104,7 @@ class EvoAlgorithm:
                     excel.write_population_stats(self.population, self.param_names, run_i, 
                                                  self.gen_i, key/100.)
 
-        gen_stats = GenerationStats(self.population, self.param_names)
+        gen_stats = GenerationStats(self.population, self.param_names, self.selection_method)
         if run_i < RUNS_TO_PLOT:
             self.gen_stats_list.append(gen_stats)
 
