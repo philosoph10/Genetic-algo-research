@@ -28,7 +28,9 @@ class GenerationStats:
         self.intensity = None
         self.reproduction_rate = None
         self.loss_of_diversity = None
-        self.n_unique = None
+        # Calculate unique chromosomes separately before and after selection
+        self.n_unique_before_selection = None
+        self.n_unique_after_selection = None
         self.lose_optimal = False
 
         # Selection pressure
@@ -42,7 +44,7 @@ class GenerationStats:
 
     def calculate_stats_before_selection(self, prev_gen_stats):
         self.ids_before_selection = set(self.population.get_ids())
-        self.n_unique = self.population.get_unique_X()
+        self.n_unique_before_selection = self.population.get_unique_X()
 
         if self.param_names[0] != 'FconstALL':
             self.f_avg = self.population.get_fitness_avg()
@@ -73,6 +75,7 @@ class GenerationStats:
 
     def calculate_stats_after_selection(self):
         ids_after_selection = set(self.population.get_ids())
+        self.n_unique_after_selection = self.population.get_unique_X()
 
         self.reproduction_rate = len(ids_after_selection) / N
         self.loss_of_diversity = len([True for id in self.ids_before_selection if id not in ids_after_selection]) / N

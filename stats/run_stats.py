@@ -119,8 +119,8 @@ class RunStats:
         
         # Unique chromosomes
         if self.unique_X_start is None:
-            self.unique_X_start = gen_stats.n_unique
-        self.unique_X_fin = gen_stats.n_unique
+            self.unique_X_start = gen_stats.n_unique_before_selection
+        self.unique_X_fin = gen_stats.n_unique_after_selection
 
         if self.param_names[0] != 'FconstALL':
             # Loss of Optimal Chromosome

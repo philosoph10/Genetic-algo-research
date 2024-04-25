@@ -52,7 +52,9 @@ def plot_run_stats(
         fraction_of_best = [gen_stats.num_of_best / N for gen_stats in gen_stats_list]
         __plot_stat(fraction_of_best, param_names, run_i, 'Fraction of best individual accross generation', 'fraction_of_best', y_lim=(-0.01,1.01))
 
-        ns_unique = [gen_stats.n_unique for gen_stats in gen_stats_list]
+        # ns_unique = [gen_stats.n_unique for gen_stats in gen_stats_list]
+        ns_unique = [gen_stats_list[0].n_unique_before_selection] + \
+        [gen_stats.n_unique_after_selection for gen_stats in gen_stats_list]
         __plot_stat(ns_unique, param_names, run_i, '#unique chromosomes', 'n_unique')
                     
 
