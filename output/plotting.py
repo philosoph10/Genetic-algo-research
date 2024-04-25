@@ -208,8 +208,8 @@ def __get_path_hierarchy(param_names, run_i):
         OUTPUT_FOLDER,
         'graphs',
         param_names[0], # fitness function
-        str(N),
         param_names[1], # selection method
+        str(N),
         param_names[2], # genetic operator
         param_names[3], # initial population
         str(run_i)
