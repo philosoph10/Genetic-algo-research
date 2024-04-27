@@ -162,7 +162,7 @@ class RunStats:
                 self.s_avg = (self.s_avg * (gen_i - 1) + gen_stats.difference) / gen_i
 
             # Growth Rate
-            if self.GR_start is None:
+            if gen_i == 1:
                 self.GR_start = gen_stats.growth_rate
             if gen_i == 2:
                 self.GR_early = gen_stats.growth_rate
