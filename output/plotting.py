@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator, MultipleLocator
 from config import N, OUTPUT_FOLDER
 import os
 from model.population import Population
@@ -15,16 +16,18 @@ def plot_run_stats(
     __plot_stat2(reproduction_rates, losses_of_diversity, param_names, run_i, 'Reproduction Rate', 'Loss of Diversity', 'rr_and_lod', y_lim=(0,1))
 
     if param_names[0] != 'FconstALL':
+        
+
         f_avgs = [gen_stats.f_avg for gen_stats in gen_stats_list]
         __plot_stat(f_avgs, param_names, run_i, 'Fitness Average', 'f_avg')
 
         f_bests = [gen_stats.f_best for gen_stats in gen_stats_list]
         __plot_stat(f_bests, param_names, run_i, 'Highest Fitness', 'f_best')
 
-        intensities = [gen_stats.intensity for gen_stats in gen_stats_list if gen_stats.intensity is not None]
+        intensities = [gen_stats.intensity for gen_stats in gen_stats_list]
         __plot_stat(intensities, param_names, run_i, 'Selection Intensity', 'intensity')
 
-        differences = [gen_stats.difference for gen_stats in gen_stats_list if gen_stats.difference is not None]
+        differences = [gen_stats.difference for gen_stats in gen_stats_list]
         __plot_stat(differences, param_names, run_i, 'Selection Difference', 'difference')
 
         __plot_stat2(differences, intensities, param_names, run_i, 'Difference', 'Intensity', 'intensity_and_difference')
@@ -82,11 +85,18 @@ def __plot_stat(
     if not os.path.exists(path):
         os.makedirs(path)
 
-    plt.plot(data)
+    x_ticks = range(len(data))
+    if data[-1] is None:
+        x_ticks = range(1, len(data))
+        data = data[:-1]
+    plt.plot(x_ticks, data)
     plt.ylabel(ylabel)
     plt.xlabel('Generation')
-    x_size = len(data) if data[-1] is not None else len(data) - 1
-    plt.xticks(range(x_size))
+    # plt.xticks(x_ticks)
+    # Set the ticks for the x-axis with MaxNLocator
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, nbins=10))
+    # n = len(data)
+    # plt.gca().xaxis.set_minor_locator(MultipleLocator((x_ticks[-1] - x_ticks[0]) / (n + 1)))
     if y_lim is not None:
         plt.ylim(*y_lim)
     plt.savefig(f'{path}/{file_name}.png')
@@ -105,12 +115,14 @@ def __plot_stat2(
     if not os.path.exists(path):
         os.makedirs(path)
 
-    plt.plot(data1, label=label1)
-    plt.plot(data2, label=label2)
+    x_ticks = range(1, len(data1)+1)
+    plt.plot(x_ticks, data1, label=label1)
+    plt.plot(x_ticks, data2, label=label2)
 
     if y_lim is not None:
         plt.ylim(*y_lim)
 
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, nbins=10))
     plt.xlabel('Generation')
     plt.legend()
     plt.savefig(f'{path}/{file_name}.png')
