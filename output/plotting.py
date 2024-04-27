@@ -15,9 +15,13 @@ def plot_run_stats(
     losses_of_diversity = [gen_stats.loss_of_diversity for gen_stats in gen_stats_list if gen_stats.loss_of_diversity is not None]
     __plot_stat2(reproduction_rates, losses_of_diversity, param_names, run_i, 'Reproduction Rate', 'Loss of Diversity', 'rr_and_lod', y_lim=(0,1))
 
+    # ns_unique = [gen_stats.n_unique for gen_stats in gen_stats_list]
+    ns_unique = [gen_stats_list[0].n_unique_before_selection] + \
+    [gen_stats.n_unique_after_selection for gen_stats in gen_stats_list]
+    __plot_stat(ns_unique, param_names, run_i, '#unique chromosomes', 'n_unique')
+
     if param_names[0] != 'FconstALL':
         
-
         f_avgs = [gen_stats.f_avg for gen_stats in gen_stats_list]
         __plot_stat(f_avgs, param_names, run_i, 'Fitness Average', 'f_avg')
 
@@ -54,11 +58,6 @@ def plot_run_stats(
 
         fraction_of_best = [gen_stats.num_of_best / N for gen_stats in gen_stats_list]
         __plot_stat(fraction_of_best, param_names, run_i, 'Fraction of best individual accross generation', 'fraction_of_best', y_lim=(-0.01,1.01))
-
-        # ns_unique = [gen_stats.n_unique for gen_stats in gen_stats_list]
-        ns_unique = [gen_stats_list[0].n_unique_before_selection] + \
-        [gen_stats.n_unique_after_selection for gen_stats in gen_stats_list]
-        __plot_stat(ns_unique, param_names, run_i, '#unique chromosomes', 'n_unique')
                     
 
 def plot_generation_stats(
