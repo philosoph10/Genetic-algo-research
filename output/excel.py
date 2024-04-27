@@ -150,6 +150,8 @@ def write_generation_stats(generation_stats_list, param_names, run_i):
             worksheet.write(row, 0, i + 1)
             for col in range(len(GEN_STATS_NAMES)):
                 value = getattr(gen_stats, GEN_STATS_NAMES[col])
+                if GEN_STATS_NAMES[col] == 'growth_rate' and i == 0:
+                    value = None
                 __write_value_with_nan_inf_handling(worksheet, row, col, value)
                 # worksheet.write(row, col + 1, getattr(gen_stats, GEN_STATS_NAMES[col]))
     else:
